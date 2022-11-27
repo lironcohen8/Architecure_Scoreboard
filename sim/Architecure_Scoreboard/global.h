@@ -1,7 +1,7 @@
+#pragma once
+
 #include <stdint.h>
 
-#define MAX_ASSEMBLY_LINES          (4096)
-#define INSTRUCTION_LINE_LEN		(8)
 #define CONFIGURED_UNITS            (6)
 
 typedef enum {
@@ -45,7 +45,6 @@ typedef struct {
 } asm_cmd_t;
 
 typedef struct {
-    opcode_e    operation;
     uint32_t    num_units;
     uint32_t    unit_delay_cycles;
 } unit_config_t;

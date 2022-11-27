@@ -143,10 +143,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cfg.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="memin.c" />
+    <ClCompile Include="parsing.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cfg.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="memin.h" />
+    <ClInclude Include="parsing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,15 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\input_parsing">
+      <UniqueIdentifier>{efe704e7-93f2-4523-97d3-563080654d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input_parsing\memin">
+      <UniqueIdentifier>{38e5d673-e1e0-4270-a3e9-53e733bf8f1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input_parsing\cfg">
+      <UniqueIdentifier>{156ebf5f-f7f8-499b-9949-9134e7113dcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="parsing.c">
+      <Filter>Source Files\input_parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="memin.c">
+      <Filter>Source Files\input_parsing\memin</Filter>
+    </ClCompile>
+    <ClCompile Include="cfg.c">
+      <Filter>Source Files\input_parsing\cfg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parsing.h">
+      <Filter>Source Files\input_parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="memin.h">
+      <Filter>Source Files\input_parsing\memin</Filter>
+    </ClInclude>
+    <ClInclude Include="cfg.h">
+      <Filter>Source Files\input_parsing\cfg</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
