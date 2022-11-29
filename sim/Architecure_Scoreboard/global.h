@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define CONFIGURED_UNITS            (6)
 
@@ -32,29 +33,58 @@ typedef enum {
     F13,
     F14,
     F15
-} cpu_reg_e;
+} reg_e;
+
+typedef enum {
+    READ_OPERANDS,
+    EXEC,
+    WRITE_RESULT
+} unit_state_e;
 
 typedef struct {
-    opcode_e opcode;
-    cpu_reg_e dst;
-    cpu_reg_e src0;
-    cpu_reg_e src1;
-    int imm;
+    unit_id_t   unit_id;
+    unit_t*     unit;
+    int         cycle_issued;
+    int         cycle_read_operands;
+    int         cycle_execute_end;
+    int         cycle_write_result;
+} inst_trace_t;
 
-    uint32_t raw_cmd;
-} asm_cmd_t;
+typedef struct {
+    opcode_e        opcode;
+    reg_e           dst;
+    reg_e           src0;
+    reg_e           src1;
+    int             imm;
+    inst_trace_t    inst_trace;
+    uint32_t        raw_inst;
+} inst_t;
 
 typedef struct {
     uint32_t    num_units;
     uint32_t    unit_delay_cycles;
-} unit_config_t;
+} op_config_t;
 
 typedef struct {
     opcode_e    operation;
     uint32_t    index;
-} op_unit_t;
+} unit_id_t;
+
+typedef struct unit_t {
+    unit_id_t       unit_id;
+    reg_e           Fi;
+    reg_e           Fj;
+    reg_e           Fk;
+    struct unit_t*  Qj;
+    struct unit_t*  Qk;
+    bool            Rj;
+    bool            Rk;
+    bool            busy;
+    unit_state_e    unit_state;
+    int             exec_cnt;
+} unit_t;
 
 typedef struct {
-    unit_config_t   units[CONFIGURED_UNITS];
-    op_unit_t       trace_unit;
+    op_config_t     units[CONFIGURED_UNITS];
+    unit_id_t       trace_unit;
 } config_t;
