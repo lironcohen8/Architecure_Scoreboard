@@ -8,14 +8,14 @@ V 7. change inst struct to include also the properties for trace file: unit_name
 8. create regs array that contains reg struct:
 	reg_value (single precision)
 	reg_status (pointer to relevant unit)
-9. create methods that convert float to SP and SP to float
+V 9. don't create methods that convert float to SP and SP to float
 10. regs init - F0=0, F1=1.0, etc
 11. create instructions queue of 16 asm_cmd_t
 12. support queue functionalities (is full, enqueue, dequeue, top)
 13. fetch - check if queue is full. if full- does nothing, if not - enqueue.
 14. issue - checks queue's top: 
 	* checks the status of the dst reg, if it's busy does nothing
-	* checks that there is a relevant non-busy unit, if there isn't does nothing
+	* checks that there is a relevant non-busy unit, if there isn't does nothing 
 	* if two checks are ok, dequeue the instruction from the queue and assign a unit to it (with relevant bookkeeping)
 15. read operands - checks if Rj, Rk are Yes. If not - wait. If both 	Yes, changes them to No.
 16. implement operation methods (add, sub, etc)  	
