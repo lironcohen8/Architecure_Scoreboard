@@ -42,25 +42,6 @@ typedef enum {
 } unit_state_e;
 
 typedef struct {
-    unit_id_t   unit_id;
-    unit_t*     unit;
-    int         cycle_issued;
-    int         cycle_read_operands;
-    int         cycle_execute_end;
-    int         cycle_write_result;
-} inst_trace_t;
-
-typedef struct {
-    opcode_e        opcode;
-    reg_e           dst;
-    reg_e           src0;
-    reg_e           src1;
-    int             imm;
-    inst_trace_t    inst_trace;
-    uint32_t        raw_inst;
-} inst_t;
-
-typedef struct {
     uint32_t    num_units;
     uint32_t    unit_delay_cycles;
 } op_config_t;
@@ -83,6 +64,26 @@ typedef struct unit_t {
     unit_state_e    unit_state;
     int             exec_cnt;
 } unit_t;
+
+
+typedef struct {
+    unit_id_t   unit_id;
+    unit_t* unit;
+    int         cycle_issued;
+    int         cycle_read_operands;
+    int         cycle_execute_end;
+    int         cycle_write_result;
+} inst_trace_t;
+
+typedef struct {
+    opcode_e        opcode;
+    reg_e           dst;
+    reg_e           src0;
+    reg_e           src1;
+    int             imm;
+    inst_trace_t    inst_trace;
+    uint32_t        raw_inst;
+} inst_t;
 
 typedef struct {
     op_config_t     units[CONFIGURED_UNITS];
