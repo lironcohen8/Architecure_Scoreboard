@@ -22,6 +22,9 @@
     <Filter Include="Source Files\input_parsing\cfg">
       <UniqueIdentifier>{156ebf5f-f7f8-499b-9949-9134e7113dcd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\initialization">
+      <UniqueIdentifier>{e45c01c5-3ba7-4ad8-8184-804a24e9bbcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -36,6 +39,9 @@
     <ClCompile Include="cfg.c">
       <Filter>Source Files\input_parsing\cfg</Filter>
     </ClCompile>
+    <ClCompile Include="init.c">
+      <Filter>Source Files\initialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -49,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="cfg.h">
       <Filter>Source Files\input_parsing\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="init.h">
+      <Filter>Source Files\initialization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

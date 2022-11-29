@@ -17,7 +17,7 @@ static void parse_line_to_cmd(char* line, inst_t* cmd) {
 }
 
 
-void load_instructions(FILE* instr_file, inst_t* imem_buff) {
+void load_memin(FILE* instr_file, inst_t* imem_buff) {
     char line_buffer[INSTRUCTION_LINE_LEN + 2];
     int instructions_count = 0;
     inst_t curr_cmd;

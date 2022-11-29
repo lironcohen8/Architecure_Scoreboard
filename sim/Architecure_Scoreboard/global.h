@@ -32,7 +32,8 @@ typedef enum {
     F12,
     F13,
     F14,
-    F15
+    F15,
+    REGS_NUM
 } reg_e;
 
 typedef enum {
@@ -89,3 +90,9 @@ typedef struct {
     op_config_t     units[CONFIGURED_UNITS];
     unit_id_t       trace_unit;
 } config_t;
+
+typedef struct {
+    float   value;
+    /* If not null, the relevant unit for updating this register */
+    unit_t* status;
+} reg_val_status;
