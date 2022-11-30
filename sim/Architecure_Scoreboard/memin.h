@@ -7,4 +7,4 @@
 #define INSTRUCTION_LINE_LEN		(8)
 
 
-void load_instructions(FILE* instr_file, inst_t* imem_buff);
+void load_memin(FILE* instr_file, uint32_t* imem_buff);

@@ -22,6 +22,12 @@
     <Filter Include="Source Files\input_parsing\cfg">
       <UniqueIdentifier>{156ebf5f-f7f8-499b-9949-9134e7113dcd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\initialization">
+      <UniqueIdentifier>{e45c01c5-3ba7-4ad8-8184-804a24e9bbcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\instruction_queue">
+      <UniqueIdentifier>{9a26287c-4cb9-4f19-aa8d-71c8f5afbe3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -36,6 +42,12 @@
     <ClCompile Include="cfg.c">
       <Filter>Source Files\input_parsing\cfg</Filter>
     </ClCompile>
+    <ClCompile Include="init.c">
+      <Filter>Source Files\initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="inst_queue.c">
+      <Filter>Source Files\instruction_queue</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -49,6 +61,12 @@
     </ClInclude>
     <ClInclude Include="cfg.h">
       <Filter>Source Files\input_parsing\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="init.h">
+      <Filter>Source Files\initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="inst_queue.h">
+      <Filter>Source Files\instruction_queue</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
