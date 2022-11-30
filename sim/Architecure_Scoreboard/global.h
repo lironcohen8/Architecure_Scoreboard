@@ -91,8 +91,16 @@ typedef struct {
     unit_id_t       trace_unit;
 } config_t;
 
+typedef union {
+    uint32_t uint32_val;
+    float    float_val;
+} float_uint;
+
 typedef struct {
-    float   value;
+    /* value representation both as uint32 and as float 
+    when reading from memory values are represented as uint32 but when performing ALU 
+    operation we will use the float representation */
+    float_uint   value;
     /* If not null, the relevant unit for updating this register */
-    unit_t* status;
+    unit_t*     status;
 } reg_val_status;

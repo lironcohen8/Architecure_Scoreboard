@@ -1,6 +1,7 @@
 #include "global.h"
 #include "memin.h"
 
+// THIS IS THE DECODE FUNCTION - SHOULD BE CALLED WITH ISSUE STAGE
 static void parse_line_to_cmd(char* line, inst_t* cmd) {
     /* Each command is 32 bits*/
     uint32_t raw;
@@ -17,14 +18,14 @@ static void parse_line_to_cmd(char* line, inst_t* cmd) {
 }
 
 
-void load_memin(FILE* instr_file, inst_t* imem_buff) {
+void load_memin(FILE* instr_file, uint32_t* imem_buff) {
     char line_buffer[INSTRUCTION_LINE_LEN + 2];
-    int instructions_count = 0;
-    inst_t curr_cmd;
+    int memory_count = 0;
+    uint32_t curr_mem;
     /* stops when either (n-1) characters are read, or /n is read
     We want to read the /n char so it won't get in to the next line */
     while (fgets(line_buffer, INSTRUCTION_LINE_LEN + 2, instr_file) != NULL) {
-        parse_line_to_cmd(line_buffer, &curr_cmd);
-        imem_buff[instructions_count++] = curr_cmd;
+        sscanf_s(line_buffer, "%lX", &curr_mem);
+        imem_buff[memory_count++] = curr_mem;
     }
 }
