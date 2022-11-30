@@ -19,9 +19,9 @@ V 9. don't create methods that convert float to SP and SP to float
 	* if two checks are ok, dequeue the instruction from the queue and assign a unit to it (with relevant bookkeeping)
 15. read operands - checks if Rj, Rk are Yes. If not - wait. If both 	Yes, changes them to No.
 16. implement operation methods (add, sub, etc)  	
-17. execution - count down (make sure we notice that the last cycle of read operation is the first cycle of execution). when 0 - executes the relevant operation.
+17. execution - count down (make sure we notice that the last cycle of read operation is the first cycle of execution).
 18. write result - checks if Rj, Rk are No for all units that are waiting to the reg we are going to write. If not - wait. 
-	If ok - updates the register value and add relevant bookkeeping.
+	If ok - executes the relevant operation, updates the register value and add relevant bookkeeping.
 19. create method that checks conditions for write and write / write and 	read form the same address in memory, used in LD and ST executions. 
 	We be called in wrote result step.
 	TODO - think about an implementation for that.
