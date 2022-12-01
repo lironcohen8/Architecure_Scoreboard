@@ -12,15 +12,3 @@ void load_memin(FILE* instr_file, uint32_t* imem_buff) {
         imem_buff[memory_count++] = curr_mem;
     }
 }
-
-// THIS IS THE DECODE FUNCTION - SHOULD BE CALLED WITH ISSUE STAGE
-static void parse_line_to_inst(uint32_t raw, inst_t* inst) {
-    /* construct the command object */
-    inst->imm = raw & 0xFFF;
-    inst->src1 = (raw >> 12) & 0xF;
-    inst->src0 = (raw >> 16) & 0xF;
-    inst->dst = (raw >> 20) & 0xF;
-    inst->opcode = (raw >> 24) & 0xF;
-
-    inst->raw_inst = raw;
-}

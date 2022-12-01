@@ -1,30 +1,29 @@
 #include "operations.h"
-#include "main.c"
 
-void ld(int dst, int imm) {
+void ld_op(reg_val_status* g_regs, uint32_t* g_mem_arr, int dst, int imm) {
 	g_regs[dst].value.uint32_val = g_mem_arr[imm];
 }
 
-void st(int dst, int imm) {
+void st_op(reg_val_status* g_regs, uint32_t* g_mem_arr, int dst, int imm) {
 	g_mem_arr[imm] = g_regs[dst].value.uint32_val;
 }
 
-void add(int dst, int src0, int src1) {
+void add_op(reg_val_status* g_regs, int dst, int src0, int src1) {
 	g_regs[dst].value.float_val = g_regs[src0].value.float_val + g_regs[src1].value.float_val;
 }
 
-void sub(int dst, int src0, int src1) {
+void sub_op(reg_val_status* g_regs, int dst, int src0, int src1) {
 	g_regs[dst].value.float_val = g_regs[src0].value.float_val - g_regs[src1].value.float_val;
 }
 
-void mult(int dst, int src0, int src1) {
+void mult_op(reg_val_status* g_regs, int dst, int src0, int src1) {
 	g_regs[dst].value.float_val = g_regs[src0].value.float_val * g_regs[src1].value.float_val;
 }
 
-void div(int dst, int src0, int src1) {
+void div_op(reg_val_status* g_regs, int dst, int src0, int src1) {
 	g_regs[dst].value.float_val = g_regs[src0].value.float_val / g_regs[src1].value.float_val;
 }
 
-void halt() {
+void halt_op() {
 	return;
 }
