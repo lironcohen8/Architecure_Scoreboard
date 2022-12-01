@@ -1,5 +1,5 @@
 #pragma once
-#include "global.h";
+#include "global.h"
 
 void ld_op(reg_val_status* g_regs, uint32_t* g_mem_arr, int dst, int imm);
 

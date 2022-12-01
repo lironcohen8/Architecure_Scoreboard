@@ -149,6 +149,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="memin.c" />
     <ClCompile Include="operations.c" />
+    <ClCompile Include="output_files.c" />
     <ClCompile Include="parsing.c" />
     <ClCompile Include="scoreboard.c" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="inst_queue.h" />
     <ClInclude Include="memin.h" />
     <ClInclude Include="operations.h" />
+    <ClInclude Include="output_files.h" />
     <ClInclude Include="parsing.h" />
     <ClInclude Include="scoreboard.h" />
   </ItemGroup>

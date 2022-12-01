@@ -28,6 +28,15 @@
     <Filter Include="Source Files\instruction_queue">
       <UniqueIdentifier>{9a26287c-4cb9-4f19-aa8d-71c8f5afbe3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\scoreboard">
+      <UniqueIdentifier>{7ffd0ee4-64d7-4464-9b17-637f41ec21ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\output_files">
+      <UniqueIdentifier>{a95f112b-a6a9-4965-be53-1a55a9e8f140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\operations">
+      <UniqueIdentifier>{2cd7fd8c-6007-44fd-959e-1871e87ce463}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -48,6 +57,15 @@
     <ClCompile Include="inst_queue.c">
       <Filter>Source Files\instruction_queue</Filter>
     </ClCompile>
+    <ClCompile Include="output_files.c">
+      <Filter>Source Files\output_files</Filter>
+    </ClCompile>
+    <ClCompile Include="scoreboard.c">
+      <Filter>Source Files\scoreboard</Filter>
+    </ClCompile>
+    <ClCompile Include="operations.c">
+      <Filter>Source Files\operations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -67,6 +85,15 @@
     </ClInclude>
     <ClInclude Include="inst_queue.h">
       <Filter>Source Files\instruction_queue</Filter>
+    </ClInclude>
+    <ClInclude Include="output_files.h">
+      <Filter>Source Files\output_files</Filter>
+    </ClInclude>
+    <ClInclude Include="operations.h">
+      <Filter>Source Files\operations</Filter>
+    </ClInclude>
+    <ClInclude Include="scoreboard.h">
+      <Filter>Source Files\scoreboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
