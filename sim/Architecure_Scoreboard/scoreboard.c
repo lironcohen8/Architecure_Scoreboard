@@ -55,7 +55,8 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	uint32_t inst_int = top(&g_inst_queue);
 	inst_t* inst = (inst_t*)malloc(sizeof(inst_t*));
 	if (inst == NULL) {
-		goto exit;
+		printf("Error when malloc");
+		exit(0);
 	}
 	
 	// decoding the instruction
@@ -74,10 +75,7 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	dequeue(&g_inst_queue); // TODO method can be void because it is called after top
 	assign_unit_to_inst(g_regs, inst, assigned_unit);
 	update_scoreboard_after_issue(g_regs, g_config, inst, assigned_unit);
-
-exit:
-	printf("Error when malloc");
-	exit(0);
+	return true;
 }
 
 bool read_operands(unit_t* assigned_unit) {
