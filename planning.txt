@@ -31,7 +31,8 @@ V 16. implement operation methods (add, sub, etc)
 23. understand if we need to trace unit after running the step or before (in execute all).
 24. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant mem address and export only until this counter.
 
-100. free all mallocs
+99. Get rid of TODOS
+100. free all mallocs (units, instructuions)
 101. close files
 102. add documentation file
 103. write three memin + cfg files for tests.

@@ -17,6 +17,8 @@ unit_t** init_units(config_t* config) {
             for (uint32_t i = 0; i < num_units; i++) {
                 op_units[operation][i].unit_id.index = i;
                 op_units[operation][i].unit_id.operation = operation;
+                op_units[operation][i].unit_state = IDLE;
+                op_units[operation][i].busy = false;
             }
         }
     }
