@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="cfg.c" />
     <ClCompile Include="init.c" />
+    <ClCompile Include="inst_queue.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="memin.c" />
     <ClCompile Include="parsing.c" />
@@ -152,6 +153,8 @@
   <ItemGroup>
     <ClInclude Include="cfg.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="init.h" />
+    <ClInclude Include="inst_queue.h" />
     <ClInclude Include="memin.h" />
     <ClInclude Include="parsing.h" />
   </ItemGroup>
