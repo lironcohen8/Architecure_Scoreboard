@@ -51,6 +51,7 @@ typedef struct {
 typedef struct {
     opcode_e    operation;
     uint32_t    index;
+    char*       unit_id_str;
 } unit_id_t;
 
 typedef struct unit_t {
@@ -98,10 +99,11 @@ typedef union {
 } float_uint;
 
 typedef struct {
+    char*         name;
     /* value representation both as uint32 and as float 
     when reading from memory values are represented as uint32 but when performing ALU 
     operation we will use the float representation */
     float_uint   value;
     /* If not null, the relevant unit for updating this register */
     unit_t*     status;
-} reg_val_status;
+} reg_t;

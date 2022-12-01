@@ -32,11 +32,11 @@ unit_t* find_free_unit(config_t g_config, unit_t** g_op_units, opcode_e operatio
 	return NULL;
 }
 
-void assign_unit_to_inst(reg_val_status* g_regs, inst_t* inst, unit_t* assigned_unit) {
+void assign_unit_to_inst(reg_t* g_regs, inst_t* inst, unit_t* assigned_unit) {
 	g_regs[inst->dst].status = assigned_unit;
 }
 
-void update_scoreboard_after_issue(reg_val_status* g_regs, config_t g_config, inst_t* inst, unit_t* assigned_unit) {
+void update_scoreboard_after_issue(reg_t* g_regs, config_t g_config, inst_t* inst, unit_t* assigned_unit) {
 	assigned_unit->busy = true;
 	assigned_unit->exec_cnt = g_config.units[inst->opcode].unit_delay_cycles;
 	assigned_unit->Fi = inst->dst;
@@ -48,7 +48,7 @@ void update_scoreboard_after_issue(reg_val_status* g_regs, config_t g_config, in
 	assigned_unit->Rk = assigned_unit->Qk == NULL;
 }
 
-bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config, unit_t** g_op_units) {
+bool issue(inst_queue_t* g_inst_queue, reg_t* g_regs, config_t g_config, unit_t** g_op_units) {
 	if (is_empty(g_inst_queue)) {
 		return false;
 	}

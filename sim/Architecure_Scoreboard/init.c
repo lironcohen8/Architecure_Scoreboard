@@ -17,6 +17,7 @@ unit_t** init_units(config_t* config) {
             for (uint32_t i = 0; i < num_units; i++) {
                 op_units[operation][i].unit_id.index = i;
                 op_units[operation][i].unit_id.operation = operation;
+                sprintf_s(op_units[operation][i].unit_id.unit_id_str, "%s%d", operation, i);
                 op_units[operation][i].unit_state = IDLE;
                 op_units[operation][i].busy = false;
             }
@@ -30,9 +31,10 @@ exit:
     exit(0);
 }
 
-void init_regs_status_values(reg_val_status* regs) {
+void init_regs(reg_t* regs) {
     for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
         regs[reg_index].value.float_val = (float)reg_index;
         regs[reg_index].status = NULL;
+        sprintf_s(regs[reg_index].name, "F%d", reg_index);
     }
 }
