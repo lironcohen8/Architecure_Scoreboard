@@ -69,7 +69,7 @@ typedef struct unit_t {
 
 typedef struct {
     unit_id_t   unit_id;
-    unit_t* unit;
+    unit_t*     unit;
     int         cycle_issued;
     int         cycle_read_operands;
     int         cycle_execute_end;

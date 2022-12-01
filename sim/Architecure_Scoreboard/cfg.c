@@ -1,5 +1,4 @@
 #include "cfg.h"
-#include "global.h"
 
 static param_type_e cfg_str_param_type(char* param_str) {
     char* ret;

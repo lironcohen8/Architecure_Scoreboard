@@ -52,7 +52,7 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	}
 
 	// retrieving instructions queue's top
-	uint32_t inst_int = top(&g_inst_queue);
+	uint32_t inst_int = top(g_inst_queue);
 	inst_t* inst = (inst_t*)malloc(sizeof(inst_t*));
 	if (inst == NULL) {
 		printf("Error when malloc");
