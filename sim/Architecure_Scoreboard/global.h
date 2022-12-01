@@ -37,6 +37,7 @@ typedef enum {
 } reg_e;
 
 typedef enum {
+    IDLE,
     READ_OPERANDS,
     EXEC,
     WRITE_RESULT

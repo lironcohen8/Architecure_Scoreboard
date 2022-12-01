@@ -78,6 +78,9 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	// Mark dest reg status as taken by the unit
 	assign_unit_to_inst(g_regs, inst, assigned_unit);
 	update_scoreboard_after_issue(g_regs, g_config, inst, assigned_unit);
+
+	// After succesfull issue next state is read_operands
+	assigned_unit->unit_state = READ_OPERANDS;
 	return true;
 }
 
@@ -90,6 +93,8 @@ bool read_operands(unit_t* assigned_unit) {
 	// If both are ready, set them to not ready
 	assigned_unit->Rj = false;
 	assigned_unit->Rk = false;
+	// After succesfull read next state is exec
+	assigned_unit->unit_state = EXEC;
 	return true;
 }
 
