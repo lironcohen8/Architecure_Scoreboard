@@ -148,7 +148,9 @@
     <ClCompile Include="inst_queue.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="memin.c" />
+    <ClCompile Include="operations.c" />
     <ClCompile Include="parsing.c" />
+    <ClCompile Include="scoreboard.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cfg.h" />
@@ -156,7 +158,9 @@
     <ClInclude Include="init.h" />
     <ClInclude Include="inst_queue.h" />
     <ClInclude Include="memin.h" />
+    <ClInclude Include="operations.h" />
     <ClInclude Include="parsing.h" />
+    <ClInclude Include="scoreboard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
