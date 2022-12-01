@@ -1,8 +1,8 @@
 #include "scoreboard.h";
 
-bool fetch(inst_queue_t g_inst_queue, uint32_t* g_mem_arr, int pc) {
-	if (!g_inst_queue.is_full) {
-		enqueue(&g_inst_queue, g_mem_arr[pc]);
+bool fetch(inst_queue_t* g_inst_queue, uint32_t* g_mem_arr, int pc) {
+	if (!is_full(g_inst_queue)) {
+		enqueue(g_inst_queue, g_mem_arr[pc]);
 		return true;
 	}
 	return false;
@@ -46,14 +46,17 @@ void update_scoreboard_after_issue(reg_val_status* g_regs, config_t g_config, in
 	assigned_unit->Rk = assigned_unit->Qk == NULL;
 }
 
-bool issue(inst_queue_t g_inst_queue, reg_val_status* g_regs, config_t g_config, unit_t** g_op_units) {
-	if (g_inst_queue.is_empty) {
+bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config, unit_t** g_op_units) {
+	if (is_empty(g_inst_queue)) {
 		return false;
 	}
 
 	// retrieving instructions queue's top
 	uint32_t inst_int = top(&g_inst_queue);
 	inst_t* inst = (inst_t*)malloc(sizeof(inst_t*));
+	if (inst == NULL) {
+		goto exit;
+	}
 	
 	// decoding the instruction
 	parse_line_to_inst(inst_int, inst);
@@ -71,6 +74,10 @@ bool issue(inst_queue_t g_inst_queue, reg_val_status* g_regs, config_t g_config,
 	dequeue(&g_inst_queue); // TODO method can be void because it is called after top
 	assign_unit_to_inst(g_regs, inst, assigned_unit);
 	update_scoreboard_after_issue(g_regs, g_config, inst, assigned_unit);
+
+exit:
+	printf("Error when malloc");
+	exit(0);
 }
 
 bool read_operands(unit_t* assigned_unit) {
