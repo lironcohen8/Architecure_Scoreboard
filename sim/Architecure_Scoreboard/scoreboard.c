@@ -1,4 +1,6 @@
-#include "scoreboard.h";
+#include <stdio.h>
+#include <stdlib.h>
+#include "scoreboard.h"
 
 bool fetch(inst_queue_t* g_inst_queue, uint32_t* g_mem_arr, int pc) {
 	if (!is_full(g_inst_queue)) {
@@ -8,7 +10,7 @@ bool fetch(inst_queue_t* g_inst_queue, uint32_t* g_mem_arr, int pc) {
 	return false;
 }
 
-void parse_line_to_inst(uint32_t raw, inst_t* inst) {
+static void parse_line_to_inst(uint32_t raw, inst_t* inst) {
 	/* construct the command object */
 	inst->imm = raw & 0xFFF;
 	inst->src1 = (raw >> 12) & 0xF;
@@ -24,7 +26,7 @@ unit_t* find_free_unit(config_t g_config, unit_t** g_op_units, opcode_e operatio
 	for (int i = 0; i < unit_cnt; i++) {
 		unit_t unit = g_op_units[operation][i];
 		if (!unit.busy) {
-			return &unit;
+			return &g_op_units[operation][i];
 		}
 	}
 	return NULL;
@@ -52,7 +54,7 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	}
 
 	// retrieving instructions queue's top
-	uint32_t inst_int = top(&g_inst_queue);
+	uint32_t inst_int = top(g_inst_queue);
 	inst_t* inst = (inst_t*)malloc(sizeof(inst_t*));
 	if (inst == NULL) {
 		printf("Error when malloc");
@@ -72,7 +74,8 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	if (assigned_unit == NULL) {
 		return false;
 	}
-	dequeue(&g_inst_queue); // TODO method can be void because it is called after top
+	dequeue(g_inst_queue); // TODO method can be void because it is called after top
+	// Mark dest reg status as taken by the unit
 	assign_unit_to_inst(g_regs, inst, assigned_unit);
 	update_scoreboard_after_issue(g_regs, g_config, inst, assigned_unit);
 	return true;
