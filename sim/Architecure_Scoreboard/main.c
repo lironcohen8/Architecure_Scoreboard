@@ -7,11 +7,13 @@
 #include "init.h"
 #include "inst_queue.h"
 
-uint32_t        g_mem_arr[MAX_ASSEMBLY_LINES]; /* memory array contains both imem and dmem */
+uint32_t        g_mem_arr[MEMORY_SIZE];     /* memory array contains both imem and dmem */
+inst_t          g_inst_arr[MEMORY_SIZE];    /* issued instructions array */
 config_t        g_config;                   /* Configuration paramaters */
 unit_t**        g_op_units;
 reg_val_status  g_regs[REGS_NUM];
 inst_queue_t    g_inst_queue;
+int             clock_cycle;
 
 int main(int argc, char* argv[]) {
 

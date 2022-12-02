@@ -51,6 +51,7 @@ typedef struct {
 typedef struct {
     opcode_e    operation;
     uint32_t    index;
+    char*       unit_id_str;
 } unit_id_t;
 
 typedef struct unit_t {
@@ -70,7 +71,7 @@ typedef struct unit_t {
 
 typedef struct {
     unit_id_t   unit_id;
-    unit_t* unit;
+    unit_t*     unit;
     int         cycle_issued;
     int         cycle_read_operands;
     int         cycle_execute_end;
@@ -105,3 +106,32 @@ typedef struct {
     /* If not null, the relevant unit for updating this register */
     unit_t*     status;
 } reg_val_status;
+
+static const char* regs_str[] = {
+    "F0",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+};
+
+static const char* opcode_str[] = {
+    "LD",
+    "ST",
+    "ADD",
+    "SUB",
+    "MULT",
+    "DIV",
+    "HALT"
+};

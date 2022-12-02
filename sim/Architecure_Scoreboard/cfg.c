@@ -1,21 +1,20 @@
 #include "cfg.h"
-#include "global.h"
 
 static param_type_e cfg_str_param_type(char* param_str) {
     char* ret;
     ret = strstr(param_str, "units");
     if (ret != NULL) {
-        /* this is a number of untis paramater */
+        /* this is a number of units paramater */
         return UNITS_NUM;
     }
     ret = strstr(param_str, "delay");
     if (ret != NULL) {
-        /* this is a number of untis paramater */
+        /* this is a unit delay paramater */
         return UNIT_DELAY;
     }
     ret = strstr(param_str, "trace_unit");
     if (ret != NULL) {
-        /* this is a number of untis paramater */
+        /* this is a trace unit paramater */
         return TRACE_UNIT;
     }
     
@@ -98,7 +97,7 @@ void load_configuration(FILE* cfg_file, config_t* config) {
                 if (curr_cfg_type == UNIT_DELAY) {
                     config->units[curr_cfg_op].unit_delay_cycles = cfg_num_param;
                 }
-                // No else here since cfg_str_param_type would exit for ilegal configuration param
+                // No else here since cfg_str_param_type would exit for illegal configuration param
             }
         }
         else {
