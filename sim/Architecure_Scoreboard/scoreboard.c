@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "scoreboard.h"
 
+static int issued_cnt = 0;
+
 bool fetch(inst_queue_t* g_inst_queue, uint32_t* g_mem_arr, int pc) {
 	if (!is_full(g_inst_queue)) {
 		enqueue(g_inst_queue, g_mem_arr[pc]);
@@ -10,15 +12,15 @@ bool fetch(inst_queue_t* g_inst_queue, uint32_t* g_mem_arr, int pc) {
 	return false;
 }
 
-static void parse_line_to_inst(uint32_t raw, inst_t* inst) {
+void parse_line_to_inst(uint32_t raw_inst, inst_t* inst) {
 	/* construct the command object */
-	inst->imm = raw & 0xFFF;
-	inst->src1 = (raw >> 12) & 0xF;
-	inst->src0 = (raw >> 16) & 0xF;
-	inst->dst = (raw >> 20) & 0xF;
-	inst->opcode = (raw >> 24) & 0xF;
+	inst->imm = raw_inst & 0xFFF;
+	inst->src1 = (raw_inst >> 12) & 0xF;
+	inst->src0 = (raw_inst >> 16) & 0xF;
+	inst->dst = (raw_inst >> 20) & 0xF;
+	inst->opcode = (raw_inst >> 24) & 0xF;
 
-	inst->raw_inst = raw;
+	inst->raw_inst = raw_inst;
 }
 
 unit_t* find_free_unit(config_t g_config, unit_t** g_op_units, opcode_e operation) {
@@ -48,21 +50,27 @@ void update_scoreboard_after_issue(reg_val_status* g_regs, config_t g_config, in
 	assigned_unit->Rk = assigned_unit->Qk == NULL;
 }
 
-bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config, unit_t** g_op_units) {
+void insert_inst_into_inst_arr(inst_t* g_inst_arr, inst_t* inst) {
+	
+	g_inst_arr[issued_cnt++] = *inst;
+}
+
+
+bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, inst_t* g_inst_arr, config_t g_config, unit_t** g_op_units, int clock_cycle) {
 	if (is_empty(g_inst_queue)) {
 		return false;
 	}
 
 	// retrieving instructions queue's top
-	uint32_t inst_int = top(g_inst_queue);
-	inst_t* inst = (inst_t*)malloc(sizeof(inst_t*));
+	uint32_t raw_inst = top(g_inst_queue);
+	
+	// decoding the instruction
+	inst_t* inst = (inst_t *)malloc(sizeof(inst_t));
 	if (inst == NULL) {
 		printf("Error when malloc");
 		exit(0);
 	}
-	
-	// decoding the instruction
-	parse_line_to_inst(inst_int, inst);
+	parse_line_to_inst(raw_inst, inst);
 
 	// if the dst register is busy, waiting
 	if (g_regs[inst->dst].status->busy = true) {
@@ -74,17 +82,21 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, config_t g_config
 	if (assigned_unit == NULL) {
 		return false;
 	}
+
+	// everything is checked, issuing
 	dequeue(g_inst_queue); // TODO method can be void because it is called after top
 	// Mark dest reg status as taken by the unit
 	assign_unit_to_inst(g_regs, inst, assigned_unit);
 	update_scoreboard_after_issue(g_regs, g_config, inst, assigned_unit);
+	insert_inst_into_inst_arr(g_inst_arr, inst);
 
 	// After succesfull issue next state is read_operands
 	assigned_unit->unit_state = READ_OPERANDS;
+	inst->inst_trace.cycle_issued = clock_cycle;
 	return true;
 }
 
-bool read_operands(unit_t* assigned_unit) {
+bool read_operands(unit_t* assigned_unit, inst_t* inst, int clock_cycle) {
 	// checks if both src0 and src1 registers are ready
 	if (!assigned_unit->Rj || !assigned_unit->Rk) {
 		return false;
@@ -93,8 +105,11 @@ bool read_operands(unit_t* assigned_unit) {
 	// If both are ready, set them to not ready
 	assigned_unit->Rj = false;
 	assigned_unit->Rk = false;
+
 	// After succesfull read next state is exec
 	assigned_unit->unit_state = EXEC;
+	inst->inst_trace.cycle_read_operands = clock_cycle;
+
 	return true;
 }
 

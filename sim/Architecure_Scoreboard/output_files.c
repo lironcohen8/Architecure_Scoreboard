@@ -15,11 +15,11 @@ void write_regout_file(FILE* regout_file, reg_val_status* g_regs) {
 }
 
 // will be written in the end of execution
-void write_traceinst_file(FILE* traceinst_file, inst_t* inst) {
+void write_traceinst_file(FILE* traceinst_file, inst_t* g_inst_arr) {
     for (int i = 0; i < MEMORY_SIZE; i++) { // TODO change to number of instructions
-        inst_trace_t inst_trace = inst->inst_trace;
+        inst_trace_t inst_trace = g_inst_arr[i].inst_trace;
         fprintf_s(traceinst_file, "%08X %d %s %d %d %d %d\n",
-            inst->raw_inst,
+            g_inst_arr[i].raw_inst,
             i,
             inst_trace.unit_id.unit_id_str,
             inst_trace.cycle_issued,
