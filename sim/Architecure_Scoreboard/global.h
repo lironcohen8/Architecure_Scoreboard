@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <inttypes.h>
 
 #define CONFIGURED_UNITS            (6)
 
@@ -99,7 +100,6 @@ typedef union {
 } float_uint;
 
 typedef struct {
-    char*         name;
     /* value representation both as uint32 and as float 
     when reading from memory values are represented as uint32 but when performing ALU 
     operation we will use the float representation */
@@ -107,3 +107,32 @@ typedef struct {
     /* If not null, the relevant unit for updating this register */
     unit_t*     status;
 } reg_t;
+
+static const char* regs_str[] = {
+    "F0",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+};
+
+static const char* opcode_str[] = {
+    "LD",
+    "ST",
+    "ADD",
+    "SUB",
+    "MULT",
+    "DIV",
+    "HALT"
+};
