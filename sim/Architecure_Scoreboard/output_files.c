@@ -2,7 +2,7 @@
 
 // will be written in the end of execution
 void write_memout_file(FILE* memout_file, uint32_t* g_mem_arr) {
-    for (int i = 0; i < MAX_ASSEMBLY_LINES; i++) { // TODO consider changing to memory_count
+    for (int i = 0; i < MEMORY_SIZE; i++) { // TODO consider changing to memory_count
         fprintf_s(memout_file, "%lX\n", g_mem_arr[i]);
     }
 }
@@ -16,7 +16,7 @@ void write_regout_file(FILE* regout_file, reg_val_status* g_regs) {
 
 // will be written in the end of execution
 void write_traceinst_file(FILE* traceinst_file, inst_t* inst) {
-    for (int i = 0; i < MAX_ASSEMBLY_LINES; i++) { // TODO change to number of instructions
+    for (int i = 0; i < MEMORY_SIZE; i++) { // TODO change to number of instructions
         inst_trace_t inst_trace = inst->inst_trace;
         fprintf_s(traceinst_file, "%08X %d %s %d %d %d %d\n",
             inst->raw_inst,

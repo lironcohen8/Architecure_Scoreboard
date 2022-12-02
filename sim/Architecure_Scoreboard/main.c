@@ -7,7 +7,7 @@
 #include "init.h"
 #include "inst_queue.h"
 
-uint32_t        g_mem_arr[MAX_ASSEMBLY_LINES]; /* memory array contains both imem and dmem */
+uint32_t        g_mem_arr[MEMORY_SIZE]; /* memory array contains both imem and dmem */
 config_t        g_config;                   /* Configuration paramaters */
 unit_t**        g_op_units;
 reg_val_status  g_regs[REGS_NUM];
