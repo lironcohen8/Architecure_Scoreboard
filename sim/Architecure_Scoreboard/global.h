@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <inttypes.h>
 
 #define CONFIGURED_UNITS            (6)
 
@@ -52,6 +51,7 @@ typedef struct {
 typedef struct {
     opcode_e    operation;
     uint32_t    index;
+    char*       unit_id_str;
 } unit_id_t;
 
 typedef struct unit_t {

@@ -1,5 +1,8 @@
 #include "init.h"
 
+void create_unit_id_str(unit_id_t* id) {
+    sprintf_s(id->unit_id_str, "%s%u", opcode_str[id->operation], id->index);
+}
 
 unit_t** init_units(config_t* config) {
     unit_t** op_units = (unit_t**)malloc(CONFIGURED_UNITS * sizeof(unit_t*));
@@ -18,6 +21,7 @@ unit_t** init_units(config_t* config) {
                 op_units[operation][i].unit_id.index = i;
                 op_units[operation][i].unit_id.operation = operation;
                 op_units[operation][i].unit_state = IDLE;
+                create_unit_id_str(&op_units[operation][i].unit_id);
                 op_units[operation][i].busy = false;
             }
         }
