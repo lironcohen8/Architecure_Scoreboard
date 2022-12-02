@@ -65,20 +65,16 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, inst_t* g_inst_ar
 	uint32_t raw_inst = top(g_inst_queue);
 	
 	// decoding the instruction
-	inst_t* inst = (inst_t *)malloc(sizeof(inst_t));
-	if (inst == NULL) {
-		printf("Error when malloc");
-		exit(0);
-	}
-	parse_line_to_inst(raw_inst, inst);
+	inst_t inst;
+	parse_line_to_inst(raw_inst, &inst);
 
 	// if the dst register is busy, waiting
-	if (g_regs[inst->dst].status->busy = true) {
+	if (g_regs[inst.dst].status->busy = true) {
 		return false;
 	}
 
 	// if there is no free unit, waiting
-	unit_t* assigned_unit = find_free_unit(g_config, g_op_units, inst->opcode);
+	unit_t* assigned_unit = find_free_unit(g_config, g_op_units, inst.opcode);
 	if (assigned_unit == NULL) {
 		return false;
 	}
@@ -86,13 +82,13 @@ bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, inst_t* g_inst_ar
 	// everything is checked, issuing
 	dequeue(g_inst_queue); // TODO method can be void because it is called after top
 	// Mark dest reg status as taken by the unit
-	assign_unit_to_inst(g_regs, inst, assigned_unit);
-	update_scoreboard_after_issue(g_regs, g_config, inst, assigned_unit);
-	insert_inst_into_inst_arr(g_inst_arr, inst);
+	assign_unit_to_inst(g_regs, &inst, assigned_unit);
+	update_scoreboard_after_issue(g_regs, g_config, &inst, assigned_unit);
+	insert_inst_into_inst_arr(g_inst_arr, &inst);
 
 	// After succesfull issue next state is read_operands
 	assigned_unit->unit_state = READ_OPERANDS;
-	inst->inst_trace.cycle_issued = clock_cycle;
+	inst.inst_trace.cycle_issued = clock_cycle;
 	return true;
 }
 
