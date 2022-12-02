@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #define CONFIGURED_UNITS            (6)
+#define UNIT_ID_STR_LEN             (6)
 
 typedef enum {
     LD      = 0,
@@ -51,7 +52,7 @@ typedef struct {
 typedef struct {
     opcode_e    operation;
     uint32_t    index;
-    char*       unit_id_str;
+    char        unit_id_str[UNIT_ID_STR_LEN];
 } unit_id_t;
 
 typedef struct unit_t {

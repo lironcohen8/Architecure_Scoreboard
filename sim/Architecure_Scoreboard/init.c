@@ -1,7 +1,7 @@
 #include "init.h"
 
 void create_unit_id_str(unit_id_t* id) {
-    sprintf_s(id->unit_id_str, "%s%u", opcode_str[id->operation], id->index);
+    sprintf_s(id->unit_id_str, UNIT_ID_STR_LEN, "%s%u", opcode_str[id->operation], id->index);
 }
 
 unit_t** init_units(config_t* config) {
