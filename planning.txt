@@ -28,8 +28,9 @@ V 16. implement operation methods (add, sub, etc)
 20. add a method for writing memout file - dump the mem array after execution.
 21. add a method for writing regout file - dump the float values of regs array after execution.
 22. add a method for writing traceinst file - dump the inst values after execution.
-23. understand if we need to trace unit after running the step or before (in execute all).
-24. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant mem address and export only until this counter.
+23. add a method for writing traceunit file - every cycle.
+24. understand if we need to trace unit after running the step or before (in execute all).
+25. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant mem address and export only until this counter.
 
 99. Get rid of TODOS
 100. free all mallocs (units, instructuions)
