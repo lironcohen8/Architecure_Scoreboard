@@ -22,17 +22,17 @@ V 16. implement operation methods (add, sub, etc)
 17. execution - count down (make sure we notice that the last cycle of read operation is the first cycle of execution).
 18. write result - checks if Rj, Rk are No for all units that are waiting to the reg we are going to write. If not - wait. 
 	If ok - executes the relevant operation, updates the register value and add relevant bookkeeping.
-19. create method that checks conditions for write and write / write and 	read form the same address in memory, used in LD and ST executions. 
+19. create method that checks conditions for write and write / write and read form the same address in memory, used in LD and ST executions. 
 	We be called in wrote result step.
 	TODO - think about an implementation for that.
-20. add a method for writing memout file - dump the mem array after execution.
-21. add a method for writing regout file - dump the float values of regs array after execution.
-22. add a method for writing traceinst file - dump the inst values after execution.
-23. add a method for writing traceunit file - every cycle.
+V 20. add a method for writing memout file - dump the mem array after execution.
+V 21. add a method for writing regout file - dump the float values of regs array after execution.
+V 22. add a method for writing traceinst file - dump the inst values after execution.
+V 23. add a method for writing traceunit file - every cycle.
 24. understand if we need to trace unit after running the step or before (in execute all).
 25. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant mem address and export only until this counter.
 
-99. Get rid of TODOS
+99. get rid of TODOs
 100. free all mallocs (units, instructuions)
 101. close files
 102. add documentation file
