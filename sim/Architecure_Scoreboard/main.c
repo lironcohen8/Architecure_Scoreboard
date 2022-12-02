@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 
     g_op_units = init_units(&g_config);
 
-    init_regs(g_regs);
+    init_regs_status_values(g_regs);
 
     init_instruction_queue(&g_inst_queue);
 

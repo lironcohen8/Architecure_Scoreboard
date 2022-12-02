@@ -11,7 +11,7 @@ void write_memout_file(FILE* memout_file, uint32_t* g_mem_arr) {
 }
 
 // will be written in the end of execution
-void write_regout_file(FILE* regout_file, reg_t* g_regs) {
+void write_regout_file(FILE* regout_file, reg_val_status* g_regs) {
     char val_buffer[NUMBER_OF_DIGITS_OF_FLOAT + 2];
 
     for (int i = 0; i < REGS_NUM; i++) {
@@ -42,7 +42,7 @@ char* get_op_name(opcode_e op_index) {
 }
 
 // will be written in every cycle
-void write_traceunit_file(FILE* traceunit_file, reg_t* g_regs, int cycle, unit_t* trace_unit) {
+void write_traceunit_file(FILE* traceunit_file, reg_val_status* g_regs, int cycle, unit_t* trace_unit) {
     fprintf_s(traceunit_file, "%d %s%" PRIu32 "%s %s %s %s%" PRIu32 "%s" PRIu32 "%s %s\n",
         cycle,
         trace_unit->unit_id.operation,

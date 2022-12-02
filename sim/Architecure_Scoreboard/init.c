@@ -30,7 +30,7 @@ exit:
     exit(0);
 }
 
-void init_regs(reg_val_status* regs) {
+void init_regs_status_values(reg_val_status* regs) {
     for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
         regs[reg_index].value.float_val = (float)reg_index;
         regs[reg_index].status = NULL;
