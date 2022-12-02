@@ -52,7 +52,6 @@ typedef struct {
 typedef struct {
     opcode_e    operation;
     uint32_t    index;
-    char*       unit_id_str;
 } unit_id_t;
 
 typedef struct unit_t {
@@ -106,7 +105,7 @@ typedef struct {
     float_uint   value;
     /* If not null, the relevant unit for updating this register */
     unit_t*     status;
-} reg_t;
+} reg_val_status;
 
 static const char* regs_str[] = {
     "F0",

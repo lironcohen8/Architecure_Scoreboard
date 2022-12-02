@@ -10,7 +10,7 @@
 uint32_t        g_mem_arr[MAX_ASSEMBLY_LINES]; /* memory array contains both imem and dmem */
 config_t        g_config;                   /* Configuration paramaters */
 unit_t**        g_op_units;
-reg_t           g_regs[REGS_NUM];
+reg_val_status  g_regs[REGS_NUM];
 inst_queue_t    g_inst_queue;
 
 int main(int argc, char* argv[]) {

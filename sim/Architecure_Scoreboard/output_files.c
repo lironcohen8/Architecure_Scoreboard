@@ -24,10 +24,11 @@ void write_regout_file(FILE* regout_file, reg_t* g_regs) {
 void write_traceinst_file(FILE* traceinst_file, inst_t* inst) {
     for (int i = 0; i < MAX_ASSEMBLY_LINES; i++) { // TODO change to number of instructions
         inst_trace_t inst_trace = inst->inst_trace;
-        fprintf(traceinst_file, "%08X %d %s %d %d %d %d\n",
+        fprintf(traceinst_file, "%08X %d %s%" PRIu32 "%d %d %d %d\n",
             inst->raw_inst,
             i,
-            inst_trace.unit_id.unit_id_str,
+            opcode_str[inst_trace.unit_id.operation],
+            inst_trace.unit_id.index,
             inst_trace.cycle_issued,
             inst_trace.cycle_read_operands,
             inst_trace.cycle_execute_end,
