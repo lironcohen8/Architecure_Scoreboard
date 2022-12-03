@@ -55,24 +55,9 @@ typedef struct {
     char        unit_id_str[UNIT_ID_STR_LEN];
 } unit_id_t;
 
-typedef struct unit_t {
-    unit_id_t       unit_id;
-    reg_e           Fi;
-    reg_e           Fj;
-    reg_e           Fk;
-    struct unit_t*  Qj;
-    struct unit_t*  Qk;
-    bool            Rj;
-    bool            Rk;
-    bool            busy;
-    unit_state_e    unit_state;
-    int             exec_cnt;
-} unit_t;
-
-
 typedef struct {
-    unit_id_t   unit_id;
-    unit_t*     unit;
+    unit_id_t     unit_id;
+    struct unit_t*     unit;
     int         cycle_issued;
     int         cycle_read_operands;
     int         cycle_execute_end;
@@ -88,6 +73,21 @@ typedef struct {
     inst_trace_t    inst_trace;
     uint32_t        raw_inst;
 } inst_t;
+
+typedef struct unit_t {
+    unit_id_t       unit_id;
+    reg_e           Fi;
+    reg_e           Fj;
+    reg_e           Fk;
+    struct unit_t* Qj;
+    struct unit_t* Qk;
+    bool            Rj;
+    bool            Rk;
+    bool            busy;
+    unit_state_e    unit_state;
+    int             exec_cnt;
+    inst_t*         active_instruction;
+} unit_t;
 
 typedef struct {
     op_config_t     units[CONFIGURED_UNITS];
