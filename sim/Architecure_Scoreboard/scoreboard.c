@@ -72,7 +72,7 @@ bool issue(simulation_t* scoreboard) {
 	parse_line_to_inst(raw_inst, &inst);
 
 	// if the dst register is busy, waiting
-	if (regs[inst.dst].status->busy = true) {
+	if (regs[inst.dst].status != NULL) {
 		return false;
 	}
 
