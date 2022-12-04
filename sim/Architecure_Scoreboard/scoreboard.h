@@ -5,8 +5,8 @@
 #include "parsing.h"
 
 typedef struct {
-	/* Memory pointer */
-	uint32_t*		memory;
+	/* Memory loaded from memin.txt */
+	uint32_t		memory[MEMORY_SIZE];
 
 	/* Issued instructions array */
 	inst_t          issued_inst[MEMORY_SIZE];
@@ -16,7 +16,7 @@ typedef struct {
 	/* Instruction queue */
 	inst_queue_t	inst_queue;
 
-	/* Registes values and status */
+	/* Registers values and status */
 	reg_val_status  regs[REGS_NUM];
 
 	/* Configuration form the cfg.txt file */
@@ -31,16 +31,14 @@ typedef struct {
 	uint32_t		pc;
 
 	bool			halted;
-} scoreboard_t;
+} simulation_t;
 
-bool fetch(scoreboard_t* scoreboard);
+bool fetch(simulation_t* scoreboard);
 
-bool issue(scoreboard_t* scoreboard);
+bool issue(simulation_t* scoreboard);
 
-bool read_operands(unit_t* assigned_unit, scoreboard_t* scoreboard);
+bool read_operands(unit_t* assigned_unit, simulation_t* scoreboard);
 
-bool exec(unit_t* assigned_unit, scoreboard_t* scoreboard);
+bool exec(unit_t* assigned_unit, simulation_t* scoreboard);
 
-bool write_result(unit_t* assigned_unit, scoreboard_t* scoreboard);
-
-void init_scoreboard(scoreboard_t* scoreboard, config_t* config, uint32_t* memory_ptr);
+bool write_result(unit_t* assigned_unit, simulation_t* scoreboard);

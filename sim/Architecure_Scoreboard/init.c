@@ -1,11 +1,15 @@
 #include "init.h"
+#include "scoreboard.h"
+#include "cfg.h"
 
-void create_unit_id_str(unit_id_t* id) {
+static void create_unit_id_str(unit_id_t* id) {
     sprintf_s(id->unit_id_str, UNIT_ID_STR_LEN, "%s%u", opcode_str[id->operation], id->index);
 }
 
-unit_t** init_units(config_t* config) {
+static unit_t** init_units(config_t* config) {
     unit_t** op_units = (unit_t**)malloc(CONFIGURED_UNITS * sizeof(unit_t*));
+    unit_id_t* trace_unit = &config->trace_unit;
+
     if (op_units == NULL) {
         goto exit;
     }
@@ -21,8 +25,11 @@ unit_t** init_units(config_t* config) {
                 op_units[operation][i].unit_id.index = i;
                 op_units[operation][i].unit_id.operation = operation;
                 op_units[operation][i].unit_state = IDLE;
-                create_unit_id_str(&op_units[operation][i].unit_id);
                 op_units[operation][i].busy = false;
+                create_unit_id_str(&op_units[operation][i].unit_id);
+                if (operation == trace_unit->operation && i == trace_unit->index) {
+                    create_unit_id_str(trace_unit);
+                }
             }
         }
     }
@@ -34,9 +41,28 @@ exit:
     exit(0);
 }
 
-void init_regs_status_values(reg_val_status* regs) {
+static void init_regs_status_values(reg_val_status* regs) {
     for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
         regs[reg_index].value.float_val = (float)reg_index;
         regs[reg_index].status = NULL;
     }
+}
+
+void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file) {
+    // memory is loaded from memin.txt
+    load_memin(memin_file, simulation->memory);
+
+    simulation->clock_cycle = 0;
+    // Configuration is loaded from cfg.txt
+
+    load_configuration(cfg_file, &simulation->config);
+    simulation->halted = false;
+    simulation->pc = 0;
+
+    simulation->issued_cnt = 0;
+    // Malloc memory for units according to cnfig
+    simulation->op_units = init_units(&simulation->config);
+
+    init_regs_status_values(simulation->regs);
+    init_instruction_queue(&simulation->inst_queue);
 }

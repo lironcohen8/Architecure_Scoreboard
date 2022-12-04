@@ -2,13 +2,11 @@
 #include <stdlib.h>
 #include "scoreboard.h"
 #include "operations.h"
-#include "init.h"
 
 
-bool fetch(scoreboard_t* scoreboard) {
+bool fetch(simulation_t* scoreboard) {
 	if (!is_full(&scoreboard->inst_queue)) {
 		enqueue(&scoreboard->inst_queue, scoreboard->memory[scoreboard->pc]);
-		scoreboard->pc++;
 		return true;
 	}
 	return false;
@@ -57,7 +55,7 @@ static void insert_inst_into_inst_arr(inst_t* inst_arr, inst_t* inst, uint32_t i
 }
 
 
-bool issue(scoreboard_t* scoreboard) {
+bool issue(simulation_t* scoreboard) {
 	inst_queue_t* inst_queue = &scoreboard->inst_queue;
 	reg_val_status* regs = scoreboard->regs;
 	inst_t* issued_inst_buff = scoreboard->issued_inst;
@@ -106,7 +104,7 @@ bool issue(scoreboard_t* scoreboard) {
 	return true;
 }
 
-bool read_operands(unit_t* assigned_unit, scoreboard_t* scoreboard) {
+bool read_operands(unit_t* assigned_unit, simulation_t* scoreboard) {
 	// checks if both src0 and src1 registers are ready
 	if (!assigned_unit->Rj || !assigned_unit->Rk) {
 		return false;
@@ -125,9 +123,9 @@ bool read_operands(unit_t* assigned_unit, scoreboard_t* scoreboard) {
 	return true;
 }
 
-bool exec(unit_t* assigned_unit, scoreboard_t* scoreboard);
+bool exec(unit_t* assigned_unit, simulation_t* scoreboard);
 
-static bool units_pending_read_operands(unit_t** op_units, config_t* config, reg_e dest_reg) {
+static bool is_there_unit_pending_read_operand(unit_t** op_units, config_t* config, reg_e dest_reg) {
 	unit_t current_unit;
 	for (opcode_e operation = 0; operation < CONFIGURED_UNITS; operation++) {
 		uint32_t num_units = config->units[operation].num_units;
@@ -168,13 +166,13 @@ static void update_pending_units(unit_t** op_units, config_t* config, reg_e dest
 
 }
 
-bool write_result(unit_t* assigned_unit, scoreboard_t* scoreboard) {
+bool write_result(unit_t* assigned_unit, simulation_t* scoreboard) {
 	reg_e dest_reg = assigned_unit->Fi;
 	unit_t** op_units = scoreboard->op_units;
 	config_t* config = &scoreboard->config;
 
 	// Check for write after read - avoid writing to dest reg if any unit didn't read it yet
-	if (units_pending_read_operands(op_units, config, dest_reg)) {
+	if (is_there_unit_pending_read_operand(op_units, config, dest_reg)) {
 		return false;
 	}
 
@@ -195,17 +193,4 @@ bool write_result(unit_t* assigned_unit, scoreboard_t* scoreboard) {
 	assigned_unit->unit_state = IDLE;
 
 	return true;
-}
-
-void init_scoreboard(scoreboard_t* scoreboard, config_t* config, uint32_t* memory_ptr) {
-	scoreboard->clock_cycle = 0;
-	scoreboard->config = *config;
-	scoreboard->halted = false;
-	scoreboard->pc = 0;
-	scoreboard->memory = memory_ptr;
-	scoreboard->issued_cnt = 0;
-	// Malloc memory for units according to cnfig
-	scoreboard->op_units = init_units(config);
-	init_regs_status_values(scoreboard->regs);
-	init_instruction_queue(&scoreboard->inst_queue);
 }
