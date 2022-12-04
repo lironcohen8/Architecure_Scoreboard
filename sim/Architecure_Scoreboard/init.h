@@ -1,9 +1,7 @@
 #pragma once
 
-#include "global.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "scoreboard.h"
 
-unit_t** init_units(config_t* config);
-
-void init_regs_status_values(reg_val_status* regs);
+void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file);

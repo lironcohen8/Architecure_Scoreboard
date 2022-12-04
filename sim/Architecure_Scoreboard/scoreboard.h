@@ -2,13 +2,43 @@
 #include "global.h"
 #include "inst_queue.h"
 #include "memin.h"
+#include "parsing.h"
 
-bool fetch(inst_queue_t* g_inst_queue, uint32_t* g_mem_arr, int pc);
+typedef struct {
+	/* Memory loaded from memin.txt */
+	uint32_t		memory[MEMORY_SIZE];
 
-bool issue(inst_queue_t* g_inst_queue, reg_val_status* g_regs, inst_t* g_inst_arr, config_t g_config, unit_t** g_op_units, int clock_cycle);
+	/* Issued instructions array */
+	inst_t          issued_inst[MEMORY_SIZE];
+	/* Number of issued instructions */
+	uint32_t		issued_cnt;
 
-bool read_operands(unit_t* assigned_unit, inst_t* inst, int clock_cycle);
+	/* Instruction queue */
+	inst_queue_t	inst_queue;
 
-bool exec();
+	/* Registers values and status */
+	reg_val_status  regs[REGS_NUM];
 
-bool write_result();
+	/* Configuration form the cfg.txt file */
+	config_t		config;
+
+	/* Operational units as defined in config */
+	unit_t**		op_units;
+
+	uint32_t		clock_cycle;
+
+	/* Current pc, updated after succesful fetch */
+	uint32_t		pc;
+
+	bool			halted;
+} simulation_t;
+
+bool fetch(simulation_t* scoreboard);
+
+bool issue(simulation_t* scoreboard);
+
+bool read_operands(unit_t* assigned_unit, simulation_t* scoreboard);
+
+bool exec(unit_t* assigned_unit, simulation_t* scoreboard);
+
+bool write_result(unit_t* assigned_unit, simulation_t* scoreboard);
