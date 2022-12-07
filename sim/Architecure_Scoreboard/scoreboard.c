@@ -3,10 +3,23 @@
 #include "scoreboard.h"
 #include "operations.h"
 
+simulation_t    g_simulation;
 
-bool fetch(simulation_t* scoreboard) {
-	if (!is_full(&scoreboard->inst_queue)) {
-		enqueue(&scoreboard->inst_queue, scoreboard->memory[scoreboard->pc]);
+uint32_t num_of_active_instructions() {
+	return g_simulation.issued_cnt - g_simulation.finished_cnt;
+}
+
+bool is_halted() {
+	return g_simulation.halted;
+}
+
+void advance_pc() {
+	g_simulation.pc++;
+}
+
+bool fetch() {
+	if (!is_full(&g_simulation.inst_queue)) {
+		enqueue(&g_simulation.inst_queue, g_simulation.memory[g_simulation.pc]);
 		return true;
 	}
 	return false;
@@ -55,10 +68,10 @@ static void insert_inst_into_inst_arr(inst_t* inst_arr, inst_t* inst, uint32_t i
 }
 
 
-bool issue(simulation_t* scoreboard) {
-	inst_queue_t* inst_queue = &scoreboard->inst_queue;
-	reg_val_status* regs = scoreboard->regs;
-	inst_t* issued_inst_buff = scoreboard->issued_inst;
+bool issue() {
+	inst_queue_t* inst_queue = &g_simulation.inst_queue;
+	reg_val_status* regs = g_simulation.regs;
+	inst_t* issued_inst_buff = g_simulation.issued_inst;
 
 	if (is_empty(inst_queue)) {
 		return false;
@@ -77,7 +90,7 @@ bool issue(simulation_t* scoreboard) {
 	}
 
 	// if there is no free unit, waiting
-	unit_t* assigned_unit = find_free_unit(&scoreboard->config, scoreboard->op_units, inst.opcode);
+	unit_t* assigned_unit = find_free_unit(&g_simulation.config, g_simulation.op_units, inst.opcode);
 	if (assigned_unit == NULL) {
 		return false;
 	}
@@ -89,14 +102,14 @@ bool issue(simulation_t* scoreboard) {
 	assign_unit_to_inst(regs, &inst, assigned_unit);
 
 	// Update assigned unit parameters
-	update_scoreboard_after_issue(regs, &scoreboard->config, &inst, assigned_unit);
+	update_scoreboard_after_issue(regs, &g_simulation.config, &inst, assigned_unit);
 
 	// Update issued instructions array
-	inst.inst_trace.cycle_issued = scoreboard->clock_cycle;
-	insert_inst_into_inst_arr(issued_inst_buff, &inst, scoreboard->issued_cnt);
+	inst.inst_trace.cycle_issued = g_simulation.clock_cycle;
+	insert_inst_into_inst_arr(issued_inst_buff, &inst, g_simulation.issued_cnt);
 	// Update active instruction pointer in the assigned unit
-	assigned_unit->active_instruction = &issued_inst_buff[scoreboard->issued_cnt];
-	scoreboard->issued_cnt++;
+	assigned_unit->active_instruction = &issued_inst_buff[g_simulation.issued_cnt];
+	g_simulation.issued_cnt++;
 
 	// After succesfull issue next state is read_operands
 	assigned_unit->unit_state = READ_OPERANDS;
@@ -104,8 +117,7 @@ bool issue(simulation_t* scoreboard) {
 	return true;
 }
 
-bool read_operands(unit_t* assigned_unit, simulation_t* scoreboard) {
-	// checks if both src0 and src1 registers are ready
+bool read_operands(unit_t* assigned_unit) {
 	if (!assigned_unit->Rj || !assigned_unit->Rk) {
 		return false;
 	}
@@ -118,12 +130,26 @@ bool read_operands(unit_t* assigned_unit, simulation_t* scoreboard) {
 	assigned_unit->unit_state = EXEC;
 
 	// Update instruction trace
-	assigned_unit->active_instruction->inst_trace.cycle_read_operands = scoreboard->clock_cycle;
+	assigned_unit->active_instruction->inst_trace.cycle_read_operands = g_simulation.clock_cycle;
+
+	// When read operands is done - the first execuation cycle happens
+	// TODO: verify what happens when the delay of a unit is 1 ? does the exec and read operands finish in the same cycle ?
+	assigned_unit->exec_cnt--;
 
 	return true;
 }
 
-bool exec(unit_t* assigned_unit, simulation_t* scoreboard);
+bool exec(unit_t* assigned_unit) {
+	assigned_unit->exec_cnt--;
+
+	if (assigned_unit->exec_cnt == 0) {
+		assigned_unit->active_instruction->inst_trace.cycle_execute_end = g_simulation.clock_cycle;
+		assigned_unit->unit_state = WRITE_RESULT;
+		return true;
+	}
+
+	return false;
+}
 
 static bool is_there_unit_pending_read_operand(unit_t** op_units, config_t* config, reg_e dest_reg) {
 	unit_t current_unit;
@@ -166,10 +192,10 @@ static void update_pending_units(unit_t** op_units, config_t* config, reg_e dest
 
 }
 
-bool write_result(unit_t* assigned_unit, simulation_t* scoreboard) {
+bool write_result(unit_t* assigned_unit) {
 	reg_e dest_reg = assigned_unit->Fi;
-	unit_t** op_units = scoreboard->op_units;
-	config_t* config = &scoreboard->config;
+	unit_t** op_units = g_simulation.op_units;
+	config_t* config = &g_simulation.config;
 
 	// Check for write after read - avoid writing to dest reg if any unit didn't read it yet
 	if (is_there_unit_pending_read_operand(op_units, config, dest_reg)) {
@@ -182,15 +208,21 @@ bool write_result(unit_t* assigned_unit, simulation_t* scoreboard) {
 	// TODO hande read/write or write/write to same memory address
 
 	// Update the value in the regs array according to the instruction or load/store
-	perform_instruction(assigned_unit->active_instruction, scoreboard->regs, scoreboard->memory, &scoreboard->halted);
+	perform_instruction(assigned_unit->active_instruction, g_simulation.regs, g_simulation.memory, &g_simulation.halted);
 
 	// Update instruction trace
-	assigned_unit->active_instruction->inst_trace.cycle_write_result = scoreboard->clock_cycle;
+	assigned_unit->active_instruction->inst_trace.cycle_write_result = g_simulation.clock_cycle;
 
 	// Mark unit as not busy, and dest reg as not pending for any unit
 	assigned_unit->busy = false;
-	scoreboard->regs[dest_reg].status = NULL;
+	g_simulation.regs[dest_reg].status = NULL;
 	assigned_unit->unit_state = IDLE;
 
+	g_simulation.finished_cnt++;
+
 	return true;
+}
+
+simulation_t* get_simulation() {
+	return &g_simulation;
 }
