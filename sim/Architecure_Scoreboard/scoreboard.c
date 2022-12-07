@@ -143,9 +143,8 @@ bool exec(unit_t* assigned_unit) {
 	assigned_unit->exec_cnt--;
 
 	if (assigned_unit->exec_cnt == 0) {
-		assigned_unit->unit_state = WRITE_RESULT;
 		assigned_unit->active_instruction->inst_trace.cycle_execute_end = g_simulation.clock_cycle;
-
+		assigned_unit->unit_state = WRITE_RESULT;
 		return true;
 	}
 
