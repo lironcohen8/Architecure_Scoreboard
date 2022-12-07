@@ -4,14 +4,15 @@ V 3. create struct for unit (operation+index, Fk, Fj, Qj, Qk...)
 V 4. malloc of 6 "main" pointer in unit_types struct
 V 5. mallocs to pointers for all of the units according to count from config
 V 6. change cmds name to ints and the array name to mem
-V 7. change inst struct to include also the properties for trace file: unit_name, unit_pointer, cycle_issued, cycle_read_operands, cycle_execute_end, cycle_write_result. 
+V 7. change inst struct to include also the properties for trace file: unit_name, unit_pointer, cycle_issued, cycle_read_operands, cycle_execute_end, 	
+	cycle_write_result. 
 V 8. create regs array that contains reg struct:
 	reg_value (single precision)
 	reg_status (pointer to relevant unit)
 V 9. don't create methods that convert float to SP and SP to float
-10. regs init - F0=0, F1=1.0, etc
-11. create instructions queue of 16 asm_cmd_t
-12. support queue functionalities (is full, enqueue, dequeue, top)
+V 10. regs init - F0=0, F1=1.0, etc
+V 11. create instructions queue of 16 asm_cmd_t
+V 12. support queue functionalities (is full, enqueue, dequeue, top)
 V 13. fetch - check if queue is full. if full- does nothing, if not - enqueue.
 V 14. issue - checks queue's top: 
 	* checks the status of the dst reg, if it's busy does nothing
@@ -19,7 +20,7 @@ V 14. issue - checks queue's top:
 	* if two checks are ok, dequeue the instruction from the queue and assign a unit to it (with relevant bookkeeping)
 V 15. read operands - checks if Rj, Rk are Yes. If not - wait. If both 	Yes, changes them to No.
 V 16. implement operation methods (add, sub, etc)  	
-17. execution - count down (make sure we notice that the last cycle of read operation is the first cycle of execution).
+V 17. execution - count down (make sure we notice that the last cycle of read operation is the first cycle of execution).
 V 18. write result - checks if Rj, Rk are No for all units that are waiting to the reg we are going to write. If not - wait. 
 	If ok - executes the relevant operation, updates the register value and add relevant bookkeeping.
 19. create method that checks conditions for write and write / write and read form the same address in memory, used in LD and ST executions. 
@@ -31,7 +32,8 @@ V 23. add a method for writing traceunit file - every cycle.
 24. understand if we need to trace unit after running the step or before (in execute all).
 25. build main
 26. old and new values of regs?
-27. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant mem address and export only until this counter.
+27. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant 
+	mem address and export only until this counter.
 
 99. get rid of TODOs
 100. free all mallocs (units, instructuions)
