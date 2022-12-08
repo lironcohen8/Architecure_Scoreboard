@@ -25,7 +25,7 @@ static unit_t** init_units(config_t* config) {
                 op_units[operation][i].unit_id.index = i;
                 op_units[operation][i].unit_id.operation = operation;
                 op_units[operation][i].unit_state = IDLE;
-                op_units[operation][i].busy = false;
+                op_units[operation][i].busy.new_val = false;
                 create_unit_id_str(&op_units[operation][i].unit_id);
                 if (operation == trace_unit->operation && i == trace_unit->index) {
                     create_unit_id_str(trace_unit);
@@ -43,8 +43,8 @@ exit:
 
 static void init_regs_status_values(reg_val_status* regs) {
     for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
-        regs[reg_index].value.float_val = (float)reg_index;
-        regs[reg_index].status = NULL;
+        regs[reg_index].value.new_val.float_val = (float)reg_index;
+        regs[reg_index].status.new_val = NULL;
     }
 }
 

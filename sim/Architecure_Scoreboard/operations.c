@@ -3,27 +3,27 @@
 #include "operations.h"
 
 static void ld_op(reg_val_status* g_regs, uint32_t* g_mem_arr, reg_e dst, int imm) {
-	g_regs[dst].value.uint32_val = g_mem_arr[imm];
+	g_regs[dst].value.new_val.uint32_val = g_mem_arr[imm];
 }
 
 static void st_op(reg_val_status* g_regs, uint32_t* g_mem_arr, reg_e dst, int imm) {
-	g_mem_arr[imm] = g_regs[dst].value.uint32_val;
+	g_mem_arr[imm] = g_regs[dst].value.old_val.uint32_val;
 }
 
 static void add_op(reg_val_status* g_regs, reg_e dst, reg_e src0, reg_e src1) {
-	g_regs[dst].value.float_val = g_regs[src0].value.float_val + g_regs[src1].value.float_val;
+	g_regs[dst].value.new_val.float_val = g_regs[src0].value.old_val.float_val + g_regs[src1].value.old_val.float_val;
 }
 
 static void sub_op(reg_val_status* g_regs, reg_e dst, reg_e src0, reg_e src1) {
-	g_regs[dst].value.float_val = g_regs[src0].value.float_val - g_regs[src1].value.float_val;
+	g_regs[dst].value.new_val.float_val = g_regs[src0].value.old_val.float_val - g_regs[src1].value.old_val.float_val;
 }
 
 static void mult_op(reg_val_status* g_regs, reg_e dst, reg_e src0, reg_e src1) {
-	g_regs[dst].value.float_val = g_regs[src0].value.float_val * g_regs[src1].value.float_val;
+	g_regs[dst].value.new_val.float_val = g_regs[src0].value.old_val.float_val * g_regs[src1].value.old_val.float_val;
 }
 
 static void div_op(reg_val_status* g_regs, reg_e dst, reg_e src0, reg_e src1) {
-	g_regs[dst].value.float_val = g_regs[src0].value.float_val / g_regs[src1].value.float_val;
+	g_regs[dst].value.new_val.float_val = g_regs[src0].value.old_val.float_val / g_regs[src1].value.old_val.float_val;
 }
 
 static void halt_op(bool* halted) {

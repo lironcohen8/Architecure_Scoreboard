@@ -53,3 +53,5 @@ bool is_halted();
 void advance_pc();
 
 simulation_t* get_simulation();
+
+void cycle_end();

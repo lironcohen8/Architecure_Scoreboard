@@ -56,12 +56,12 @@ typedef struct {
 } unit_id_t;
 
 typedef struct {
-    unit_id_t     unit_id;
-    struct unit_t*     unit;
-    int         cycle_issued;
-    int         cycle_read_operands;
-    int         cycle_execute_end;
-    int         cycle_write_result;
+    unit_id_t           unit_id;
+    struct unit_t*      unit;
+    int                 cycle_issued;
+    int                 cycle_read_operands;
+    int                 cycle_execute_end;
+    int                 cycle_write_result;
 } inst_trace_t;
 
 typedef struct {
@@ -74,16 +74,31 @@ typedef struct {
     uint32_t        raw_inst;
 } inst_t;
 
+typedef struct {
+    bool old_val;
+    bool new_val;
+}bool_ff;
+
+typedef struct {
+    struct unit_t* old_val;
+    struct unit_t* new_val;
+}unit_ptr_ff;
+
+typedef struct {
+    reg_e old_val;
+    reg_e new_val;
+}reg_ff;
+
 typedef struct unit_t {
     unit_id_t       unit_id;
-    reg_e           Fi;
-    reg_e           Fj;
-    reg_e           Fk;
-    struct unit_t* Qj;
-    struct unit_t* Qk;
-    bool            Rj;
-    bool            Rk;
-    bool            busy;
+    reg_ff           Fi;
+    reg_ff           Fj;
+    reg_ff           Fk;
+    unit_ptr_ff      Qj;
+    unit_ptr_ff      Qk;
+    bool_ff          Rj;
+    bool_ff          Rk;
+    bool_ff          busy;
     unit_state_e    unit_state;
     int             exec_cnt;
     inst_t*         active_instruction;
@@ -99,14 +114,21 @@ typedef union {
     float    float_val;
 } float_uint;
 
+typedef struct float_uint_ff {
+    float_uint old_val;
+    float_uint new_val;
+}float_uint_ff;
+
 typedef struct {
     /* value representation both as uint32 and as float 
     when reading from memory values are represented as uint32 but when performing ALU 
     operation we will use the float representation */
-    float_uint   value;
+    float_uint_ff   value;
     /* If not null, the relevant unit for updating this register */
-    unit_t*     status;
+    unit_ptr_ff            status;
 } reg_val_status;
+
+
 
 static const char* regs_str[] = {
     "F0",
