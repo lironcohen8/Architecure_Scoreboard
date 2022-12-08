@@ -13,9 +13,6 @@ typedef struct {
 	/* Number of issued instructions */
 	uint32_t		issued_cnt;
 
-	/* Number of finished instructions */
-	uint32_t		finished_cnt;
-
 	/* Instruction queue */
 	inst_queue_t	inst_queue;
 
@@ -36,20 +33,12 @@ typedef struct {
 	bool			halted;
 } simulation_t;
 
-bool fetch();
+bool fetch(simulation_t* scoreboard);
 
-bool issue();
+bool issue(simulation_t* scoreboard);
 
-bool read_operands(unit_t* assigned_unit);
+bool read_operands(unit_t* assigned_unit, simulation_t* scoreboard);
 
-bool exec(unit_t* assigned_unit);
+bool exec(unit_t* assigned_unit, simulation_t* scoreboard);
 
-bool write_result(unit_t* assigned_unit);
-
-uint32_t num_of_active_instructions();
-
-bool is_halted();
-
-void advance_pc();
-
-simulation_t* get_simulation();
+bool write_result(unit_t* assigned_unit, simulation_t* scoreboard);

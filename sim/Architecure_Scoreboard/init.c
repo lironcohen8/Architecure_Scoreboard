@@ -60,7 +60,6 @@ void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file)
     simulation->pc = 0;
 
     simulation->issued_cnt = 0;
-    simulation->finished_cnt = 0;
     // Malloc memory for units according to cnfig
     simulation->op_units = init_units(&simulation->config);
 
