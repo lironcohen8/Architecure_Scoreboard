@@ -37,6 +37,9 @@
     <Filter Include="Source Files\operations">
       <UniqueIdentifier>{2cd7fd8c-6007-44fd-959e-1871e87ce463}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\disposal">
+      <UniqueIdentifier>{401f30f7-a07a-4dd6-a489-499b246b77a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
@@ -66,6 +69,9 @@
     <ClCompile Include="operations.c">
       <Filter>Source Files\operations</Filter>
     </ClCompile>
+    <ClCompile Include="free_memory.c">
+      <Filter>Source Files\disposal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="scoreboard.h">
       <Filter>Source Files\scoreboard</Filter>
+    </ClInclude>
+    <ClInclude Include="free_memory.h">
+      <Filter>Source Files\disposal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

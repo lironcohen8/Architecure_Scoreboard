@@ -58,10 +58,11 @@ void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file)
     load_configuration(cfg_file, &simulation->config);
     simulation->halted = false;
     simulation->pc = 0;
+    simulation->trace_unit = &simulation->op_units[simulation->config.trace_unit.operation][simulation->config.trace_unit.index];
 
     simulation->issued_cnt = 0;
     simulation->finished_cnt = 0;
-    // Malloc memory for units according to cnfig
+    // Malloc memory for units according to config
     simulation->op_units = init_units(&simulation->config);
 
     init_regs_status_values(simulation->regs);

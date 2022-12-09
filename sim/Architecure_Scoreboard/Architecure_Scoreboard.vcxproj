@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cfg.c" />
+    <ClCompile Include="free_memory.c" />
     <ClCompile Include="init.c" />
     <ClCompile Include="inst_queue.c" />
     <ClCompile Include="main.c" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cfg.h" />
+    <ClInclude Include="free_memory.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="inst_queue.h" />

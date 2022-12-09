@@ -30,6 +30,8 @@ typedef struct {
 
 	uint32_t		clock_cycle;
 
+	unit_t*			trace_unit;
+
 	/* Current pc, updated after succesful fetch */
 	uint32_t		pc;
 
@@ -53,5 +55,7 @@ bool is_halted();
 void advance_pc();
 
 simulation_t* get_simulation();
+
+void execute_all();
 
 void cycle_end();

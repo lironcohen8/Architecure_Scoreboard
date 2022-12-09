@@ -214,7 +214,7 @@ bool write_result(unit_t* assigned_unit) {
 	// Resolve read-after-write by updating the R fields to true in the units waiting for this write and clearing the Q fields
 	update_pending_units(op_units, config, dest_reg, assigned_unit);
 
-	// TODO hande read/write or write/write to same memory address
+	// TODO handle read/write or write/write to same memory address
 
 	// Update the value in the regs array according to the instruction or load/store
 	perform_instruction(assigned_unit->active_instruction, g_simulation.regs, g_simulation.memory, &g_simulation.halted);
@@ -234,6 +234,28 @@ bool write_result(unit_t* assigned_unit) {
 
 simulation_t* get_simulation() {
 	return &g_simulation;
+}
+
+void execute_all(simulation_t* simulation) {
+	for (opcode_e operation = 0; operation < CONFIGURED_UNITS; operation++) {
+		uint32_t num_units = simulation->config.units[operation].num_units;
+		for (uint32_t i = 0; i < num_units; i++) {
+			unit_t unit = simulation->op_units[operation][i];
+			if (unit.busy.old_val) {
+				switch (unit.unit_state) {
+				case WRITE_RESULT:
+					write_result(&unit);
+					break;
+				case EXEC:
+					exec(&unit);
+					break;
+				case READ_OPERANDS:
+					read_operands(&unit);
+					break;
+				}
+			}
+		}
+	}
 }
 
 static void update_ff_regs() {
