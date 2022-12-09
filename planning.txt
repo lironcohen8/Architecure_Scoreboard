@@ -38,8 +38,8 @@ V 28. check the case when configured delay is one cycle
 V 29. check the case of non-single-space spacing in input files 
 
 99. get rid of TODOs
-100. free all mallocs (units, instructuions)
-101. close files
+V 100. free all mallocs (units, instructuions)
+V 101. close files
 102. add documentation file
 103. write three memin + cfg files for tests.
 document the check programs in doc file
