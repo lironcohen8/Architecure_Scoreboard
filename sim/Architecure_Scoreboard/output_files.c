@@ -29,17 +29,16 @@ void write_traceinst_file(FILE* traceinst_file, inst_t* issued_inst_arr, uint32_
     }
 }
 
-
 // will be written in every cycle
 void write_traceunit_file(FILE* traceunit_file, int cycle, unit_t* trace_unit) {
     fprintf_s(traceunit_file, "%d %s %s %s %s %s %s %s %s\n",
         cycle,
         trace_unit->unit_id.unit_id_str,
-        regs_str[trace_unit->Fi.new_val],
-        regs_str[trace_unit->Fj.new_val],
-        regs_str[trace_unit->Fk.new_val],
-        trace_unit->Qj.new_val != NULL ? trace_unit->Qj.new_val->unit_id.unit_id_str : "-",
-        trace_unit->Qk.new_val != NULL ? trace_unit->Qk.new_val->unit_id.unit_id_str : "-",
-        trace_unit->Rj.new_val ? "Yes" : "No",
-        trace_unit->Rj.new_val ? "Yes" : "No");
+        regs_str[trace_unit->Fi.old_val],
+        regs_str[trace_unit->Fj.old_val],
+        regs_str[trace_unit->Fk.old_val],
+        trace_unit->Qj.old_val != NULL ? trace_unit->Qj.old_val->unit_id.unit_id_str : "-",
+        trace_unit->Qk.old_val != NULL ? trace_unit->Qk.old_val->unit_id.unit_id_str : "-",
+        trace_unit->Rj.old_val ? "Yes" : "No",
+        trace_unit->Rj.old_val ? "Yes" : "No");
 }

@@ -11,3 +11,12 @@ FILE* open_and_validate_file(char const* file_name, char const* perms) {
         return file;
     }
 }
+
+void close_file(FILE* file, char const* file_name) {
+    int result;
+    result = fclose(file);
+    if (result != 0) {
+        printf("Error closing file %s\n", file_name);
+        exit(0);
+    }
+}
