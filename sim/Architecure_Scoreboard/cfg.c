@@ -55,16 +55,18 @@ static opcode_e cfg_str_operation(char* param_str) {
 
 static int cfg_str_num_param(char* param_str) {
     int num_param;
-    /* Configuration str in format <sum_string> = <value> 
+    int equals_index = (int)(strchr(param_str, '=') - param_str);
+    /* Configuration str in format <some_string> = <value> 
     We ignore the first string and the "=" string and take the value */
-    sscanf_s(param_str, "%*s%*s%d", &num_param);
+    sscanf_s(&param_str[equals_index+1], " %d", &num_param);
     return num_param;
 }
 
 static void cfg_str_set_trace_unit(char* param_str, config_t* config) {
     char trace_unit_str[CONFIGURATION_MAX_OPCODE_LEN] = { 0 };
 
-    sscanf_s(param_str, "%*s%*s%s", trace_unit_str, CONFIGURATION_MAX_OPCODE_LEN);
+    int equals_index = (int)(strchr(param_str, '=') - param_str);
+    sscanf_s(&param_str[equals_index+1], " %s", trace_unit_str, CONFIGURATION_MAX_OPCODE_LEN);
     int l = strlen(trace_unit_str);
     for (int i = 0; i < l-1; i++)
     {

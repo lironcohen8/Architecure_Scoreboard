@@ -34,8 +34,8 @@ V 25. build main
 V 26. old and new values of regs
 27. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant 
 	mem address and export only until this counter.
-28. check the case when configured delay is one cycle
-29. check the case of non-single-space spacing in input files 
+V 28. check the case when configured delay is one cycle
+V 29. check the case of non-single-space spacing in input files 
 
 99. get rid of TODOs
 100. free all mallocs (units, instructuions)

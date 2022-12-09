@@ -142,8 +142,7 @@ bool read_operands(unit_t* assigned_unit) {
 	assigned_unit->active_instruction->inst_trace.cycle_read_operands = g_simulation.clock_cycle;
 
 	// When read operands is done - the first execuation cycle happens
-	// TODO: verify what happens when the delay of a unit is 1 ? does the exec and read operands finish in the same cycle ?
-	assigned_unit->exec_cnt--;
+	exec(assigned_unit);
 
 	return true;
 }
