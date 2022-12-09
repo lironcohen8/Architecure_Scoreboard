@@ -55,18 +55,18 @@ static opcode_e cfg_str_operation(char* param_str) {
 
 static int cfg_str_num_param(char* param_str) {
     int num_param;
-    int equals_index = (int)(strchr(param_str, '=') - param_str);
     /* Configuration str in format <some_string> = <value> 
     We ignore the first string and the "=" string and take the value */
-    sscanf_s(&param_str[equals_index+1], " %d", &num_param);
+    char* num_param_str = strchr(param_str, '=') + 1;
+    sscanf_s(num_param_str, " %d", &num_param);
     return num_param;
 }
 
 static void cfg_str_set_trace_unit(char* param_str, config_t* config) {
     char trace_unit_str[CONFIGURATION_MAX_OPCODE_LEN] = { 0 };
+    char* num_param_str = strchr(param_str, '=') + 1;
 
-    int equals_index = (int)(strchr(param_str, '=') - param_str);
-    sscanf_s(&param_str[equals_index+1], " %s", trace_unit_str, CONFIGURATION_MAX_OPCODE_LEN);
+    sscanf_s(num_param_str, " %s", trace_unit_str, CONFIGURATION_MAX_OPCODE_LEN);
     int l = strlen(trace_unit_str);
     for (int i = 0; i < l-1; i++)
     {

@@ -24,10 +24,12 @@ int main(int argc, char* argv[]) {
             // Advance PC after succesfull fetch
             advance_pc();
         }
-        execute_all();
+        execute_all(simulation);
         issue();
 
-        write_traceunit_file(traceunit_file, simulation->clock_cycle, simulation->trace_unit);
+        if (simulation->trace_unit->busy.old_val) {
+            write_traceunit_file(traceunit_file, simulation->clock_cycle, simulation->trace_unit);
+        }
 
         cycle_end();
         simulation->clock_cycle++;

@@ -56,6 +56,6 @@ void advance_pc();
 
 simulation_t* get_simulation();
 
-void execute_all();
+void execute_all(simulation_t* simulation);
 
 void cycle_end();
