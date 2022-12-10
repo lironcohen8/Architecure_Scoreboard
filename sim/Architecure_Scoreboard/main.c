@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     write_regout_file(regout_file, simulation->regs);
     write_traceinst_file(traceinst_file, simulation->issued_inst, simulation->issued_cnt);
 
-   // free_units_memory(simulation->op_units, &simulation->config);
+    free_units_memory(simulation->op_units, &simulation->config);
 
     close_file(cfg_file, argv[1]);
     close_file(memin_file, argv[2]);

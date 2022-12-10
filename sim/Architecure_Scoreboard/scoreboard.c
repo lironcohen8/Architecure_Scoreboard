@@ -18,6 +18,10 @@ void advance_pc() {
 }
 
 bool fetch() {
+	if (g_simulation.halted) {
+		return false;
+	}
+
 	if (!is_full(&g_simulation.inst_queue)) {
 		enqueue(&g_simulation.inst_queue, g_simulation.memory[g_simulation.pc]);
 		return true;
@@ -260,17 +264,17 @@ void execute_all(simulation_t* simulation) {
 	for (opcode_e operation = 0; operation < CONFIGURED_UNITS; operation++) {
 		uint32_t num_units = simulation->config.units[operation].num_units;
 		for (uint32_t i = 0; i < num_units; i++) {
-			unit_t unit = simulation->op_units[operation][i];
-			if (unit.busy.old_val) {
-				switch (unit.unit_state) {
+			unit_t* unit = &simulation->op_units[operation][i];
+			if (unit->busy.old_val) {
+				switch (unit->unit_state) {
 				case WRITE_RESULT:
-					write_result(&simulation->op_units[operation][i]);
+					write_result(unit);
 					break;
 				case EXEC:
-					exec(&simulation->op_units[operation][i]);
+					exec(unit);
 					break;
 				case READ_OPERANDS:
-					read_operands(&simulation->op_units[operation][i]);
+					read_operands(unit);
 					break;
 				}
 			}
