@@ -19,6 +19,13 @@ int main(int argc, char* argv[]) {
 
     init_simulation(simulation, memin_file, cfg_file);
 
+    // First cycle is only first fetch
+    if (fetch()) {
+        // Advance PC after succesfull fetch
+        advance_pc();
+        simulation->clock_cycle++;
+    }
+
     while (!is_halted() || (num_of_active_instructions() > 0)) {
         if (fetch()) {
             // Advance PC after succesfull fetch
@@ -39,7 +46,7 @@ int main(int argc, char* argv[]) {
     write_regout_file(regout_file, simulation->regs);
     write_traceinst_file(traceinst_file, simulation->issued_inst, simulation->issued_cnt);
 
-    free_units_memory(simulation->op_units, &simulation->config);
+   // free_units_memory(simulation->op_units, &simulation->config);
 
     close_file(cfg_file, argv[1]);
     close_file(memin_file, argv[2]);

@@ -49,6 +49,8 @@ static unit_t* find_free_unit(config_t* g_config, unit_t** g_op_units, opcode_e 
 
 static void assign_unit_to_inst(reg_val_status* regs, inst_t* inst, unit_t* assigned_unit) {
 	regs[inst->dst].status.new_val = assigned_unit;
+	inst->inst_trace.unit = assigned_unit;
+	inst->inst_trace.unit_id = assigned_unit->unit_id;
 }
 
 static void update_scoreboard_after_issue(reg_val_status* regs, config_t* config, inst_t* inst, unit_t* assigned_unit) {
@@ -64,10 +66,25 @@ static void update_scoreboard_after_issue(reg_val_status* regs, config_t* config
 	old value and see the reg X as pending and will wait for the write-result to set R to true and Q to NULL - 
 	but this won't happen becouse we will miss thewrite in this case) -
 	To complete the handling of this case, need to make sure that every cycle write-result is done before issue */
-	assigned_unit->Qj.new_val = regs[inst->src0].status.new_val;
-	assigned_unit->Qk.new_val = regs[inst->src1].status.new_val;
-	assigned_unit->Rj.new_val = (assigned_unit->Qj.new_val == NULL);
-	assigned_unit->Rk.new_val = (assigned_unit->Qk.new_val == NULL);
+	
+	if (inst->opcode == LD) { // LD doesn't depend on the values of SRC0, SRC1
+		assigned_unit->Qj.new_val = NULL;
+		assigned_unit->Qk.new_val = NULL;
+		assigned_unit->Rj.new_val = true;
+		assigned_unit->Rk.new_val = true;
+	}
+	else if (inst->opcode == ST) { // ST only depends on the value of SRC1
+		assigned_unit->Qj.new_val = NULL;
+		assigned_unit->Qk.new_val = regs[inst->src1].status.new_val;
+		assigned_unit->Rj.new_val = true;
+		assigned_unit->Rk.new_val = (assigned_unit->Qk.new_val == NULL);
+	}
+	else {
+		assigned_unit->Qj.new_val = regs[inst->src0].status.new_val;
+		assigned_unit->Qk.new_val = regs[inst->src1].status.new_val;
+		assigned_unit->Rj.new_val = (assigned_unit->Qj.new_val == NULL);
+		assigned_unit->Rk.new_val = (assigned_unit->Qk.new_val == NULL);
+	}
 }
 
 static void insert_inst_into_inst_arr(inst_t* inst_arr, inst_t* inst, uint32_t index) {
@@ -91,6 +108,11 @@ bool issue() {
 	inst_t inst;
 	parse_line_to_inst(raw_inst, &inst);
 
+	if (inst.opcode == HALT) {
+		g_simulation.halted = true;
+		return true;
+	}
+
 	// if the dst register is busy, waiting (handling write after write)
 	/* TODO verify if we need to look at the old_val or new_val here 
 	Looking at the old_val means we will have a potential delay of one cycle but probably not a deadlock */
@@ -107,11 +129,11 @@ bool issue() {
 	// everything is checked, issuing
 	dequeue(inst_queue); // TODO method can be void because it is called after top
 
-	// Mark dest reg status as taken by the unit
-	assign_unit_to_inst(regs, &inst, assigned_unit);
-
 	// Update assigned unit parameters
 	update_scoreboard_after_issue(regs, &g_simulation.config, &inst, assigned_unit);
+
+	// Mark dest reg status as taken by the unit
+	assign_unit_to_inst(regs, &inst, assigned_unit);
 
 	// Update issued instructions array
 	inst.inst_trace.cycle_issued = g_simulation.clock_cycle;
@@ -187,17 +209,16 @@ static void update_pending_units(unit_t** op_units, config_t* config, reg_e dest
 			current_unit = op_units[operation][i];
 			if (current_unit.busy.old_val) {
 				if (current_unit.Qj.old_val == writing_unit) {
-					current_unit.Rj.new_val = true;
-					current_unit.Qj.new_val = NULL;
+					op_units[operation][i].Rj.new_val = true;
+					op_units[operation][i].Qj.new_val = NULL;
 				}
 				if (current_unit.Qk.old_val == writing_unit) {
-					current_unit.Rk.new_val = true;
-					current_unit.Qk.new_val = NULL;
+					op_units[operation][i].Rk.new_val = true;
+					op_units[operation][i].Qk.new_val = NULL;
 				}
 			}
 		}
 	}
-
 }
 
 bool write_result(unit_t* assigned_unit) {
@@ -243,13 +264,13 @@ void execute_all(simulation_t* simulation) {
 			if (unit.busy.old_val) {
 				switch (unit.unit_state) {
 				case WRITE_RESULT:
-					write_result(&unit);
+					write_result(&simulation->op_units[operation][i]);
 					break;
 				case EXEC:
-					exec(&unit);
+					exec(&simulation->op_units[operation][i]);
 					break;
 				case READ_OPERANDS:
-					read_operands(&unit);
+					read_operands(&simulation->op_units[operation][i]);
 					break;
 				}
 			}

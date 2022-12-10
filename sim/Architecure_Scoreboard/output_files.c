@@ -3,7 +3,7 @@
 // will be written in the end of execution
 void write_memout_file(FILE* memout_file, uint32_t* g_mem_arr) {
     for (int i = 0; i < MEMORY_SIZE; i++) { // TODO consider changing to memory_count
-        fprintf_s(memout_file, "%lX\n", g_mem_arr[i]);
+        fprintf_s(memout_file, "%08x\n", g_mem_arr[i]);
     }
 }
 
@@ -18,7 +18,7 @@ void write_regout_file(FILE* regout_file, reg_val_status* g_regs) {
 void write_traceinst_file(FILE* traceinst_file, inst_t* issued_inst_arr, uint32_t issued_count) {
     for (uint32_t i = 0; i < issued_count; i++) {
         inst_trace_t inst_trace = issued_inst_arr[i].inst_trace;
-        fprintf_s(traceinst_file, "%08X %d %s %d %d %d %d\n",
+        fprintf_s(traceinst_file, "%08x %d %s %d %d %d %d\n",
             issued_inst_arr[i].raw_inst,
             i,
             inst_trace.unit_id.unit_id_str,
@@ -40,5 +40,5 @@ void write_traceunit_file(FILE* traceunit_file, int cycle, unit_t* trace_unit) {
         trace_unit->Qj.old_val != NULL ? trace_unit->Qj.old_val->unit_id.unit_id_str : "-",
         trace_unit->Qk.old_val != NULL ? trace_unit->Qk.old_val->unit_id.unit_id_str : "-",
         trace_unit->Rj.old_val ? "Yes" : "No",
-        trace_unit->Rj.old_val ? "Yes" : "No");
+        trace_unit->Rk.old_val ? "Yes" : "No");
 }
