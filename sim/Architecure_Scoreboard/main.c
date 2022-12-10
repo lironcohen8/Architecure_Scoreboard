@@ -19,6 +19,13 @@ int main(int argc, char* argv[]) {
 
     init_simulation(simulation, memin_file, cfg_file);
 
+    // First cycle is only first fetch
+    if (fetch()) {
+        // Advance PC after succesfull fetch
+        advance_pc();
+        simulation->clock_cycle++;
+    }
+
     while (!is_halted() || (num_of_active_instructions() > 0)) {
         if (fetch()) {
             // Advance PC after succesfull fetch

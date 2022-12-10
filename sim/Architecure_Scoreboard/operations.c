@@ -42,7 +42,7 @@ void perform_instruction(inst_t* inst, reg_val_status* g_regs, uint32_t* g_mem_a
 			ld_op(g_regs, g_mem_arr, dst, imm);
 			break;
 		case ST:
-			st_op(g_regs, g_mem_arr, dst, imm);
+			st_op(g_regs, g_mem_arr, src1, imm);
 			break;
 		case ADD:
 			add_op(g_regs, dst, src0, src1);
