@@ -32,6 +32,10 @@ typedef struct {
 
 	unit_t*			trace_unit;
 
+	uint32_t*		current_cycle_writing_addresses;
+
+	int				current_cycle_writing_addresses_cntr;
+
 	/* Current pc, updated after succesful fetch */
 	uint32_t		pc;
 

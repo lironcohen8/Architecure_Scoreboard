@@ -48,6 +48,15 @@ static void init_regs_status_values(reg_val_status* regs) {
     }
 }
 
+static void create_current_writing_addresses(simulation_t* simulation, int num_of_ld_st_units) {
+    simulation->current_cycle_writing_addresses =  (uint32_t*)calloc(num_of_ld_st_units, sizeof(uint32_t));
+    if (simulation->current_cycle_writing_addresses == NULL) {
+        printf("Error when calloc");
+        exit(0);
+    }
+    simulation->current_cycle_writing_addresses_cntr = 0;
+}
+
 void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file) {
     // memory is loaded from memin.txt
     load_memin(memin_file, simulation->memory);
@@ -65,6 +74,7 @@ void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file)
     simulation->op_units = init_units(&simulation->config);
     simulation->trace_unit = &simulation->op_units[simulation->config.trace_unit.operation][simulation->config.trace_unit.index];
 
+    create_current_writing_addresses(simulation, simulation->config.units[LD].num_units + simulation->config.units[ST].num_units);
     init_regs_status_values(simulation->regs);
     init_instruction_queue(&simulation->inst_queue);
 }

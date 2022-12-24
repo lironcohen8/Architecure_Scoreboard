@@ -225,6 +225,15 @@ static void update_pending_units(unit_t** op_units, config_t* config, reg_e dest
 	}
 }
 
+static bool is_dst_address_currently_writing_address(uint32_t dst_address) {
+	for (int i = 0; i < g_simulation.current_cycle_writing_addresses_cntr; i++) {
+		if (g_simulation.current_cycle_writing_addresses[i] == dst_address) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool write_result(unit_t* assigned_unit) {
 	reg_e dest_reg = assigned_unit->Fi.old_val;
 	unit_t** op_units = g_simulation.op_units;
@@ -235,10 +244,20 @@ bool write_result(unit_t* assigned_unit) {
 		return false;
 	}
 
+	// handle read/write or write/write to same memory address
+	int dst_address = assigned_unit->active_instruction->imm;
+	if (assigned_unit->unit_id.operation == LD && is_dst_address_currently_writing_address(dst_address)) {
+		return false;
+	}
+
+	if (assigned_unit->unit_id.operation == ST && is_dst_address_currently_writing_address(dst_address)) {
+		// adding address to current addresses list
+		g_simulation.current_cycle_writing_addresses[g_simulation.current_cycle_writing_addresses_cntr++] = dst_address;
+		return false;
+	}
+
 	// Resolve read-after-write by updating the R fields to true in the units waiting for this write and clearing the Q fields
 	update_pending_units(op_units, config, dest_reg, assigned_unit);
-
-	// TODO handle read/write or write/write to same memory address
 
 	// Update the value in the regs array according to the instruction or load/store
 	perform_instruction(assigned_unit->active_instruction, g_simulation.regs, g_simulation.memory, &g_simulation.halted);
@@ -282,6 +301,13 @@ void execute_all(simulation_t* simulation) {
 	}
 }
 
+static void clear_current_writing_addresses() {
+	for (int i = 0; i < g_simulation.current_cycle_writing_addresses_cntr; i++) {
+		g_simulation.current_cycle_writing_addresses[i] = 0;
+	}
+	g_simulation.current_cycle_writing_addresses_cntr = 0;
+}
+
 static void update_ff_regs() {
 	reg_val_status* regs = g_simulation.regs;
 	for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
@@ -310,6 +336,7 @@ static void update_ff_units() {
 }
 
 void cycle_end() {
+	clear_current_writing_addresses();
 	update_ff_regs();
 	update_ff_units();
 }
