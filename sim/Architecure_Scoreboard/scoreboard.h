@@ -32,7 +32,7 @@ typedef struct {
 
 	unit_t*			trace_unit;
 
-	int*			current_cycle_writing_addresses;
+	uint32_t*		current_cycle_writing_addresses;
 
 	int				current_cycle_writing_addresses_cntr;
 

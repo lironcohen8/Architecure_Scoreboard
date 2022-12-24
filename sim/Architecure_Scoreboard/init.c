@@ -49,7 +49,11 @@ static void init_regs_status_values(reg_val_status* regs) {
 }
 
 static void create_current_writing_addresses(simulation_t* simulation, int num_of_ld_st_units) {
-    simulation->current_cycle_writing_addresses =  (int*)calloc(num_of_ld_st_units, sizeof(int));
+    simulation->current_cycle_writing_addresses =  (uint32_t*)calloc(num_of_ld_st_units, sizeof(uint32_t));
+    if (simulation->current_cycle_writing_addresses == NULL) {
+        printf("Error when calloc");
+        exit(0);
+    }
     simulation->current_cycle_writing_addresses_cntr = 0;
 }
 
