@@ -1,3 +1,4 @@
+lines = []
 with open("input.txt", "r") as file:
     for line in file:
         # Split the line with respect to the space character
@@ -45,4 +46,8 @@ with open("input.txt", "r") as file:
             src0 = 0
             src1 = 0
         output = (operation << 24) | (dst << 20) | (src0 << 16) | (src1 << 12) | imm
-        print("{0:0{1}x}".format(output, 8))
+        lines.append("{0:0{1}x}".format(output, 8))
+
+with open('memin.txt', 'w') as f:
+  for line in lines:
+    f.write(line + '\n')
