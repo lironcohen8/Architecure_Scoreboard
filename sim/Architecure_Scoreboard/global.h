@@ -89,6 +89,16 @@ typedef struct {
     reg_e new_val;
 }reg_ff;
 
+typedef union {
+    uint32_t uint32_val;
+    float    float_val;
+} float_uint;
+
+typedef struct float_uint_ff {
+    float_uint old_val;
+    float_uint new_val;
+}float_uint_ff;
+
 typedef struct unit_t {
     unit_id_t       unit_id;
     reg_ff           Fi;
@@ -102,22 +112,13 @@ typedef struct unit_t {
     unit_state_e    unit_state;
     int             exec_cnt;
     inst_t*         active_instruction;
+    float_uint      exec_result;
 } unit_t;
 
 typedef struct {
     op_config_t     units[CONFIGURED_UNITS];
     unit_id_t       trace_unit;
 } config_t;
-
-typedef union {
-    uint32_t uint32_val;
-    float    float_val;
-} float_uint;
-
-typedef struct float_uint_ff {
-    float_uint old_val;
-    float_uint new_val;
-}float_uint_ff;
 
 typedef struct {
     /* value representation both as uint32 and as float 

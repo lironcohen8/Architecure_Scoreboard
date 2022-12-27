@@ -168,6 +168,9 @@ bool read_operands(unit_t* assigned_unit) {
 	assigned_unit->active_instruction->inst_trace.cycle_read_operands = g_simulation.clock_cycle;
 
 	// When read operands is done - the first execuation cycle happens
+	// We perform the instruction here in order to get the right values for the operation
+	// This will save the operation result in the exec_result field and the actual register will be updated in the write-result phase
+	perform_instruction(g_simulation.regs, assigned_unit->active_instruction, &assigned_unit->exec_result, g_simulation.memory, &g_simulation.halted);
 	exec(assigned_unit);
 
 	return true;
@@ -259,8 +262,10 @@ bool write_result(unit_t* assigned_unit) {
 	// Resolve read-after-write by updating the R fields to true in the units waiting for this write and clearing the Q fields
 	update_pending_units(op_units, config, dest_reg, assigned_unit);
 
-	// Update the value in the regs array according to the instruction or load/store
-	perform_instruction(assigned_unit->active_instruction, g_simulation.regs, g_simulation.memory, &g_simulation.halted);
+	// Update the value in the regs array according to the instruction result
+	if (assigned_unit->active_instruction->opcode != ST) {
+		update_reg(assigned_unit->active_instruction, g_simulation.regs, &assigned_unit->exec_result, g_simulation.memory);
+	}
 
 	// Update instruction trace
 	assigned_unit->active_instruction->inst_trace.cycle_write_result = g_simulation.clock_cycle;
