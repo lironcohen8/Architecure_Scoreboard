@@ -1,0 +1,3 @@
+ST F5 10
+LD F2 10
+HALT
