@@ -5,6 +5,10 @@
 
 simulation_t    g_simulation;
 
+static void insert_address_to_st_buff(uint32_t addr, uint32_t st_id);
+static void remove_address_from_st_buff(uint32_t addr);
+static bool is_address_collide(opcode_e opcode, uint32_t dst_address, uint32_t st_id);
+
 uint32_t num_of_active_instructions() {
 	return g_simulation.issued_cnt - g_simulation.finished_cnt;
 }
@@ -52,7 +56,9 @@ static unit_t* find_free_unit(config_t* g_config, unit_t** g_op_units, opcode_e 
 }
 
 static void assign_unit_to_inst(reg_val_status* regs, inst_t* inst, unit_t* assigned_unit) {
-	regs[inst->dst].status.new_val = assigned_unit;
+	if (inst->opcode != ST) {
+		regs[inst->dst].status.new_val = assigned_unit;
+	}
 	inst->inst_trace.unit = assigned_unit;
 	inst->inst_trace.unit_id = assigned_unit->unit_id;
 }
@@ -120,7 +126,7 @@ bool issue() {
 	// if the dst register is busy, waiting (handling write after write)
 	/* TODO verify if we need to look at the old_val or new_val here 
 	Looking at the old_val means we will have a potential delay of one cycle but probably not a deadlock */
-	if (regs[inst.dst].status.old_val != NULL) {
+	if (inst.opcode != ST && regs[inst.dst].status.old_val != NULL) {
 		return false;
 	}
 
@@ -146,9 +152,32 @@ bool issue() {
 	assigned_unit->active_instruction = &issued_inst_buff[g_simulation.issued_cnt];
 	g_simulation.issued_cnt++;
 
+	if (assigned_unit->active_instruction->opcode == ST) {
+		// Insert new store address to active addresses buffer
+		insert_address_to_st_buff(assigned_unit->active_instruction->imm, assigned_unit->unit_id.index);
+	}
+
 	// After succesfull issue next state is read_operands
 	assigned_unit->unit_state = READ_OPERANDS;
 	
+	return true;
+}
+
+static bool try_perfrom_instruction(unit_t* assigned_unit) {
+	inst_t* instruction = assigned_unit->active_instruction;
+
+	if (is_address_collide(instruction->opcode, instruction->imm, assigned_unit->unit_id.index)) {
+		// We stall the execuation of a memory instruction which will cause collision or is dependent on an earlier memory access not yet finished
+		return false;
+	}
+
+	perform_instruction(g_simulation.regs, assigned_unit->active_instruction, &assigned_unit->exec_result, g_simulation.memory, &g_simulation.halted);
+
+	if (instruction->opcode == ST) {
+		// In case of a successfull store - remove its address from the active buffer
+		remove_address_from_st_buff(instruction->imm);
+	}
+
 	return true;
 }
 
@@ -167,10 +196,6 @@ bool read_operands(unit_t* assigned_unit) {
 	// Update instruction trace
 	assigned_unit->active_instruction->inst_trace.cycle_read_operands = g_simulation.clock_cycle;
 
-	// When read operands is done - the first execuation cycle happens
-	// We perform the instruction here in order to get the right values for the operation
-	// This will save the operation result in the exec_result field and the actual register will be updated in the write-result phase
-	perform_instruction(g_simulation.regs, assigned_unit->active_instruction, &assigned_unit->exec_result, g_simulation.memory, &g_simulation.halted);
 	exec(assigned_unit);
 
 	return true;
@@ -179,7 +204,19 @@ bool read_operands(unit_t* assigned_unit) {
 bool exec(unit_t* assigned_unit) {
 	assigned_unit->exec_cnt--;
 
-	if (assigned_unit->exec_cnt == 0) {
+	// When read operands is done - the first execuation cycle happens
+	// We perform the instruction here in order to get the right values for the operation
+	// This will save the operation result in the exec_result field and the actual register will be updated in the write-result phase
+	if (!assigned_unit->executed) {
+		if (try_perfrom_instruction(assigned_unit)) {
+			assigned_unit->executed = true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	if (assigned_unit->exec_cnt <= 0) {
 		assigned_unit->active_instruction->inst_trace.cycle_execute_end = g_simulation.clock_cycle;
 		assigned_unit->unit_state = WRITE_RESULT;
 		return true;
@@ -228,13 +265,43 @@ static void update_pending_units(unit_t** op_units, config_t* config, reg_e dest
 	}
 }
 
-static bool is_dst_address_currently_writing_address(uint32_t dst_address) {
-	for (int i = 0; i < g_simulation.current_cycle_writing_addresses_cntr; i++) {
-		if (g_simulation.current_cycle_writing_addresses[i] == dst_address) {
+static bool is_address_collide(opcode_e opcode, uint32_t dst_address, uint32_t st_id) {
+	bool is_ld = (opcode == LD);
+	bool is_st = (opcode == ST);
+	
+	if (!is_ld && !is_st) {
+		return false;
+	}
+
+	// We define an address collision only for ld and st instructions.
+	//	1. for ld instruction - any address present in the active store address will indicate a collision
+	//  2. for st instruction - any address present in the active store address which came from a different st unit
+	//		wiil indicate a collision.
+	address_entry* address_buff = g_simulation.active_st_addresses;
+	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
+		if (address_buff[i].addr == dst_address && ((is_st && address_buff[i].st_id != st_id) || is_ld)) {
 			return true;
 		}
 	}
 	return false;
+}
+
+static void insert_address_to_st_buff(uint32_t addr, uint32_t st_id) {
+	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
+		if (g_simulation.active_st_addresses[i].addr == ADDRESS_INVALID) {
+			g_simulation.active_st_addresses[i].addr = addr;
+			g_simulation.active_st_addresses[i].st_id = st_id;
+			break;
+		}
+	}
+}
+
+static void remove_address_from_st_buff(uint32_t addr) {
+	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
+		if (g_simulation.active_st_addresses[i].addr == addr) {
+			g_simulation.active_st_addresses[i].addr = ADDRESS_INVALID;
+		}
+	}
 }
 
 bool write_result(unit_t* assigned_unit) {
@@ -244,18 +311,6 @@ bool write_result(unit_t* assigned_unit) {
 
 	// Check for write after read - avoid writing to dest reg if any unit didn't read it yet
 	if (is_there_unit_pending_read_operand(op_units, config, dest_reg)) {
-		return false;
-	}
-
-	// handle read/write or write/write to same memory address
-	int dst_address = assigned_unit->active_instruction->imm;
-	if (assigned_unit->unit_id.operation == LD && is_dst_address_currently_writing_address(dst_address)) {
-		return false;
-	}
-
-	if (assigned_unit->unit_id.operation == ST && is_dst_address_currently_writing_address(dst_address)) {
-		// adding address to current addresses list
-		g_simulation.current_cycle_writing_addresses[g_simulation.current_cycle_writing_addresses_cntr++] = dst_address;
 		return false;
 	}
 
@@ -274,6 +329,7 @@ bool write_result(unit_t* assigned_unit) {
 	assigned_unit->busy.new_val = false;
 	g_simulation.regs[dest_reg].status.new_val = NULL;
 	assigned_unit->unit_state = IDLE;
+	assigned_unit->executed = false;
 
 	g_simulation.finished_cnt++;
 
@@ -306,13 +362,6 @@ void execute_all(simulation_t* simulation) {
 	}
 }
 
-static void clear_current_writing_addresses() {
-	for (int i = 0; i < g_simulation.current_cycle_writing_addresses_cntr; i++) {
-		g_simulation.current_cycle_writing_addresses[i] = 0;
-	}
-	g_simulation.current_cycle_writing_addresses_cntr = 0;
-}
-
 static void update_ff_regs() {
 	reg_val_status* regs = g_simulation.regs;
 	for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
@@ -341,7 +390,6 @@ static void update_ff_units() {
 }
 
 void cycle_end() {
-	clear_current_writing_addresses();
 	update_ff_regs();
 	update_ff_units();
 }

@@ -9,5 +9,5 @@ sub_delay = 5
 mul_delay = 10
 div_delay = 20
 ld_delay = 2
-st_delay = 3
+st_delay = 6
 trace_unit = 	ST0

@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
     write_traceinst_file(traceinst_file, simulation->issued_inst, simulation->issued_cnt);
 
     free_units_memory(simulation->op_units, &simulation->config);
+    free_address_buff(simulation->active_st_addresses);
 
     close_file(cfg_file, argv[1]);
     close_file(memin_file, argv[2]);

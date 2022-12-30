@@ -6,3 +6,7 @@ void free_units_memory(unit_t** op_units, config_t* config) {
     }
     free(op_units);
 }
+
+void free_address_buff(address_entry* buff) {
+    free(buff);
+}

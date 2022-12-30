@@ -26,6 +26,7 @@ static unit_t** init_units(config_t* config) {
                 op_units[operation][i].unit_id.operation = operation;
                 op_units[operation][i].unit_state = IDLE;
                 op_units[operation][i].busy.new_val = false;
+                op_units[operation][i].executed = false;
                 create_unit_id_str(&op_units[operation][i].unit_id);
                 if (operation == trace_unit->operation && i == trace_unit->index) {
                     create_unit_id_str(trace_unit);
@@ -48,13 +49,16 @@ static void init_regs_status_values(reg_val_status* regs) {
     }
 }
 
-static void create_current_writing_addresses(simulation_t* simulation, int num_of_ld_st_units) {
-    simulation->current_cycle_writing_addresses =  (uint32_t*)calloc(num_of_ld_st_units, sizeof(uint32_t));
-    if (simulation->current_cycle_writing_addresses == NULL) {
-        printf("Error when calloc");
+static void create_current_writing_addresses(simulation_t* simulation, int num_of_st_units) {
+    simulation->active_st_addresses =  (address_entry*)malloc(num_of_st_units * sizeof(address_entry));
+    if (simulation->active_st_addresses == NULL) {
+        printf("Error when malloc");
         exit(0);
     }
-    simulation->current_cycle_writing_addresses_cntr = 0;
+    for (int i = 0; i < num_of_st_units; i++) {
+        simulation->active_st_addresses[i].addr = ADDRESS_INVALID;
+    }
+    simulation->active_st_addresses_size = num_of_st_units;
 }
 
 void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file) {
@@ -74,7 +78,7 @@ void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file)
     simulation->op_units = init_units(&simulation->config);
     simulation->trace_unit = &simulation->op_units[simulation->config.trace_unit.operation][simulation->config.trace_unit.index];
 
-    create_current_writing_addresses(simulation, simulation->config.units[LD].num_units + simulation->config.units[ST].num_units);
+    create_current_writing_addresses(simulation, simulation->config.units[ST].num_units);
     init_regs_status_values(simulation->regs);
     init_instruction_queue(&simulation->inst_queue);
 }

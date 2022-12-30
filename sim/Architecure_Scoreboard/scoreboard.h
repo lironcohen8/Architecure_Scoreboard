@@ -4,6 +4,8 @@
 #include "memin.h"
 #include "parsing.h"
 
+#define ADDRESS_INVALID		0xFFFFFFFF
+
 typedef struct {
 	/* Memory loaded from memin.txt */
 	uint32_t		memory[MEMORY_SIZE];
@@ -32,9 +34,9 @@ typedef struct {
 
 	unit_t*			trace_unit;
 
-	uint32_t*		current_cycle_writing_addresses;
+	address_entry*	active_st_addresses;
 
-	int				current_cycle_writing_addresses_cntr;
+	uint32_t		active_st_addresses_size;
 
 	/* Current pc, updated after succesful fetch */
 	uint32_t		pc;
