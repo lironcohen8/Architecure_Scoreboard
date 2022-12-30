@@ -1,5 +1,7 @@
 #include "cfg.h"
 
+/* gets a parameter string and returns the relevant parameter type
+it defines (unit num, unit delay or trace unit). */
 static param_type_e cfg_str_param_type(char* param_str) {
     char* ret;
     ret = strstr(param_str, "units");
@@ -22,6 +24,8 @@ static param_type_e cfg_str_param_type(char* param_str) {
     exit(1);
 }
 
+/* gets a parameter string and returns the relevant operation
+it defines (add, sub, mult…). */
 static opcode_e cfg_str_operation(char* param_str) {
     char* ret;
     ret = strstr(param_str, "add");
@@ -53,6 +57,8 @@ static opcode_e cfg_str_operation(char* param_str) {
     exit(1);
 }
 
+/* gets a parameter string and takes the relevant number from the string
+(without the definition and '=' sign). */
 static int cfg_str_num_param(char* param_str) {
     int num_param;
     /* Configuration str in format <some_string> = <value> 
@@ -62,6 +68,8 @@ static int cfg_str_num_param(char* param_str) {
     return num_param;
 }
 
+/* gets a parameter string and parses the trace unit operation
+and index into the configuration. */
 static void cfg_str_set_trace_unit(char* param_str, config_t* config) {
     char trace_unit_str[CONFIGURATION_MAX_OPCODE_LEN] = { 0 };
     char* num_param_str = strchr(param_str, '=') + 1;
@@ -79,7 +87,9 @@ static void cfg_str_set_trace_unit(char* param_str, config_t* config) {
     config->trace_unit.operation = cfg_str_operation(trace_unit_str);
 }
 
-
+/* gets a configuration file and a configuration struct.
+Reads the lines of the files, and parses them into 
+the configuration struct using the methods above. */
 void load_configuration(FILE* cfg_file, config_t* config) {
     char line_buffer[CONFIGURATION_MAX_LINE_LEN];
     int instructions_count = 0;
