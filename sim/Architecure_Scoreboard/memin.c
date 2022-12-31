@@ -1,5 +1,6 @@
 #include "memin.h"
 
+/* loads the memin input file to the memory struct. */
 void load_memin(FILE* memin_file, uint32_t* imem_buff) {
     char line_buffer[MEMORY_LINE_LEN + 2];
     int memory_count = 0;

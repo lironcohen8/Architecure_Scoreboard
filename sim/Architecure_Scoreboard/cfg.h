@@ -15,4 +15,7 @@ typedef enum {
 	TRACE_UNIT,
 } param_type_e;
 
+/* gets a configuration file and a configuration struct.
+Reads the lines of the files, and parses them into
+the configuration struct. */
 void load_configuration(FILE* cfg_file, config_t* config);

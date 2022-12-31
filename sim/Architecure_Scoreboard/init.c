@@ -6,6 +6,8 @@ static void create_unit_id_str(unit_id_t* id) {
     sprintf_s(id->unit_id_str, UNIT_ID_STR_LEN, "%s%u", opcode_str[id->operation], id->index);
 }
 
+/* for every operation, allocate the required memory according to num of units in configuration. 
+set up the unit values (index, operation, initial state as IDLE…). */
 static unit_t** init_units(config_t* config) {
     unit_t** op_units = (unit_t**)malloc(CONFIGURED_UNITS * sizeof(unit_t*));
     unit_id_t* trace_unit = &config->trace_unit;
@@ -42,6 +44,8 @@ exit:
     exit(0);
 }
 
+/* set up the initial registers values to be as their index.
+set up their status to be NULL (not waiting to any unit to write the value). */
 static void init_regs_status_values(reg_val_status* regs) {
     for (reg_e reg_index = F0; reg_index < REGS_NUM; reg_index++) {
         regs[reg_index].value.new_val.float_val = (float)reg_index;
@@ -49,6 +53,7 @@ static void init_regs_status_values(reg_val_status* regs) {
     }
 }
 
+/* allocating the array of the current writing address (updated every cycle) as the total number of LD and ST units */
 static void create_current_writing_addresses(simulation_t* simulation, int num_of_st_units) {
     simulation->active_st_addresses =  (address_entry*)malloc(num_of_st_units * sizeof(address_entry));
     if (simulation->active_st_addresses == NULL) {
@@ -61,6 +66,7 @@ static void create_current_writing_addresses(simulation_t* simulation, int num_o
     simulation->active_st_addresses_size = num_of_st_units;
 }
 
+/* init everything for simulation struct from memory input file and config unput file. */
 void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file) {
     // memory is loaded from memin.txt
     load_memin(memin_file, simulation->memory);

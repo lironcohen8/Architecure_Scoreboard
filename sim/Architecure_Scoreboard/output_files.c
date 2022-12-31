@@ -1,20 +1,20 @@
 #include "output_files.h"
 
-// will be written in the end of execution
+/* write the values for the memout file. will be written at the end of execution. */
 void write_memout_file(FILE* memout_file, uint32_t* g_mem_arr) {
     for (int i = 0; i < MEMORY_SIZE; i++) { // TODO consider changing to memory_count
         fprintf_s(memout_file, "%08x\n", g_mem_arr[i]);
     }
 }
 
-// will be written in the end of execution
+/* write the values for the regout file. will be written at the end of execution. */
 void write_regout_file(FILE* regout_file, reg_val_status* g_regs) {
     for (int i = 0; i < REGS_NUM; i++) {
         fprintf_s(regout_file, "%f\n", g_regs[i].value.new_val.float_val);
     }
 }
 
-// will be written in the end of execution
+/* write the values for the traceinst file. will be written at the end of execution. */
 void write_traceinst_file(FILE* traceinst_file, inst_t* issued_inst_arr, uint32_t issued_count) {
     for (uint32_t i = 0; i < issued_count; i++) {
         inst_trace_t inst_trace = issued_inst_arr[i].inst_trace;
@@ -29,7 +29,7 @@ void write_traceinst_file(FILE* traceinst_file, inst_t* issued_inst_arr, uint32_
     }
 }
 
-// will be written in every cycle
+/* write the values for the traceunit file. will be written in every cycle. */
 void write_traceunit_file(FILE* traceunit_file, int cycle, unit_t* trace_unit) {
     fprintf_s(traceunit_file, "%d %s %s %s %s %s %s %s %s\n",
         cycle,

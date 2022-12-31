@@ -8,6 +8,7 @@
 #include "free_memory.h"
 
 int main(int argc, char* argv[]) {
+    // Open the input and output files and validate them
     FILE* cfg_file = open_and_validate_file(argv[1], "r");
     FILE* memin_file = open_and_validate_file(argv[2], "r");
     FILE* memout_file = open_and_validate_file(argv[3], "w");
@@ -26,6 +27,7 @@ int main(int argc, char* argv[]) {
         simulation->clock_cycle++;
     }
 
+    // The main loop
     while (!is_halted() || (num_of_active_instructions() > 0)) {
         if (fetch()) {
             // Advance PC after succesfull fetch
@@ -42,13 +44,16 @@ int main(int argc, char* argv[]) {
         simulation->clock_cycle++;
     }
 
+    // Write output files
     write_memout_file(memout_file, simulation->memory);
     write_regout_file(regout_file, simulation->regs);
     write_traceinst_file(traceinst_file, simulation->issued_inst, simulation->issued_cnt);
 
+    // Free memory
     free_units_memory(simulation->op_units, &simulation->config);
     free_address_buff(simulation->active_st_addresses);
 
+    // Close files
     close_file(cfg_file, argv[1]);
     close_file(memin_file, argv[2]);
     close_file(memout_file, argv[3]);
