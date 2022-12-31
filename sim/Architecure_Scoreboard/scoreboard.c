@@ -125,9 +125,7 @@ bool issue() {
 		return true;
 	}
 
-	// if the dst register is busy, waiting (handling write after write)
-	/* TODO verify if we need to look at the old_val or new_val here 
-	Looking at the old_val means we will have a potential delay of one cycle but probably not a deadlock */
+	/* if the dst register is busy, waiting(handling write after write) */
 	if (inst.opcode != ST && regs[inst.dst].status.old_val != NULL) {
 		return false;
 	}
@@ -139,7 +137,7 @@ bool issue() {
 	}
 
 	// everything is checked, issuing
-	dequeue(inst_queue); // TODO method can be void because it is called after top
+	dequeue(inst_queue);
 
 	// Update assigned unit parameters
 	update_scoreboard_after_issue(regs, &g_simulation.config, &inst, assigned_unit);

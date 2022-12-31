@@ -2,7 +2,7 @@
 
 /* write the values for the memout file. will be written at the end of execution. */
 void write_memout_file(FILE* memout_file, uint32_t* g_mem_arr) {
-    for (int i = 0; i < MEMORY_SIZE; i++) { // TODO consider changing to memory_count
+    for (int i = 0; i < MEMORY_SIZE; i++) {
         fprintf_s(memout_file, "%08x\n", g_mem_arr[i]);
     }
 }
