@@ -34,15 +34,16 @@ V 25. build main
 V 26. old and new values of regs
 V 27. check the case when configured delay is one cycle
 V 28. check the case of non-single-space spacing in input files
-29. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant 
+V 29. think if we want to implement trimming the output mem file if only include zeros from a certain point onward. maybe save a counter of max relevant 
 	mem address and export only until this counter.
 
-99. get rid of TODOs
 V 100. free all mallocs (units, instructuions)
 V 101. close files
-102. check using the example files
-103. add documentation file
-104. write three memin + cfg files for tests.
-105. document the check programs in doc file
-106. go over forum
-107. organize submission
+102. get rid of TODOs
+103. check using the example files
+V 104. add documentation file
+105. write three memin + cfg files for tests.
+106. document the check programs in doc file
+107. go over forum
+108. organize submission
+

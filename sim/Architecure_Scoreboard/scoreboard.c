@@ -21,6 +21,8 @@ void advance_pc() {
 	g_simulation.pc++;
 }
 
+/* If the program is halted returns false (not fetched).
+If the instructions queue is not full, enqueues the instruction in the memory in index pc. */
 bool fetch() {
 	if (g_simulation.halted) {
 		return false;
@@ -101,7 +103,7 @@ static void insert_inst_into_inst_arr(inst_t* inst_arr, inst_t* inst, uint32_t i
 	inst_arr[index] = *inst;
 }
 
-
+/* Issuing an instruction. */
 bool issue() {
 	inst_queue_t* inst_queue = &g_simulation.inst_queue;
 	reg_val_status* regs = g_simulation.regs;
@@ -157,7 +159,7 @@ bool issue() {
 		insert_address_to_st_buff(assigned_unit->active_instruction->imm, assigned_unit->unit_id.index);
 	}
 
-	// After succesfull issue next state is read_operands
+	// After a successful issue next state is read_operands
 	assigned_unit->unit_state = READ_OPERANDS;
 	
 	return true;
@@ -167,7 +169,7 @@ static bool try_perfrom_instruction(unit_t* assigned_unit) {
 	inst_t* instruction = assigned_unit->active_instruction;
 
 	if (is_address_collide(instruction->opcode, instruction->imm, assigned_unit->unit_id.index)) {
-		// We stall the execuation of a memory instruction which will cause collision or is dependent on an earlier memory access not yet finished
+		// We stall the execution of a memory instruction that will cause a collision or is dependent on earlier memory access not yet finished
 		return false;
 	}
 
@@ -180,7 +182,7 @@ static bool try_perfrom_instruction(unit_t* assigned_unit) {
 
 	return true;
 }
-
+/* Read operands. */
 bool read_operands(unit_t* assigned_unit) {
 	if (!assigned_unit->Rj.old_val || !assigned_unit->Rk.old_val) {
 		return false;
@@ -190,7 +192,7 @@ bool read_operands(unit_t* assigned_unit) {
 	assigned_unit->Rj.new_val = false;
 	assigned_unit->Rk.new_val = false;
 
-	// After succesfull read next state is exec
+	// After a successful read next state is exec
 	assigned_unit->unit_state = EXEC;
 
 	// Update instruction trace
@@ -201,6 +203,7 @@ bool read_operands(unit_t* assigned_unit) {
 	return true;
 }
 
+/* execution. */
 bool exec(unit_t* assigned_unit) {
 	assigned_unit->exec_cnt--;
 
@@ -276,7 +279,7 @@ static bool is_address_collide(opcode_e opcode, uint32_t dst_address, uint32_t s
 	// We define an address collision only for ld and st instructions.
 	//	1. for ld instruction - any address present in the active store address will indicate a collision
 	//  2. for st instruction - any address present in the active store address which came from a different st unit
-	//		wiil indicate a collision.
+	//		will indicate a collision.
 	address_entry* address_buff = g_simulation.active_st_addresses;
 	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
 		if (address_buff[i].addr == dst_address && ((is_st && address_buff[i].st_id != st_id) || is_ld)) {
@@ -304,6 +307,7 @@ static void remove_address_from_st_buff(uint32_t addr) {
 	}
 }
 
+/* Write result. */
 bool write_result(unit_t* assigned_unit) {
 	reg_e dest_reg = assigned_unit->Fi.old_val;
 	unit_t** op_units = g_simulation.op_units;
@@ -340,6 +344,7 @@ simulation_t* get_simulation() {
 	return &g_simulation;
 }
 
+/* Going over all of the busy units, and calling the relevant method according to the unit's state. */
 void execute_all(simulation_t* simulation) {
 	for (opcode_e operation = 0; operation < CONFIGURED_UNITS; operation++) {
 		uint32_t num_units = simulation->config.units[operation].num_units;
@@ -393,4 +398,3 @@ void cycle_end() {
 	update_ff_regs();
 	update_ff_units();
 }
-
