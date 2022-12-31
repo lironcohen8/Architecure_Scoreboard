@@ -126,6 +126,7 @@ typedef struct unit_t {
     int             exec_cnt;
     inst_t*         active_instruction;
     float_uint      exec_result;
+    bool            executed;
 } unit_t;
 
 /* defines the configuration. */
@@ -175,3 +176,8 @@ static const char* opcode_str[] = {
     "DIV",
     "HALT"
 };
+
+typedef struct {
+    uint32_t addr;
+    uint32_t st_id;
+} address_entry;

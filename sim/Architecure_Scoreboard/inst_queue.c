@@ -1,14 +1,16 @@
 #include "inst_queue.h"
 
-
+/* checks if the queue is full. */
 bool is_full(inst_queue_t* queue) {
 	return queue->is_full;
 }
 
+/* checks if the queue is empty. */
 bool is_empty(inst_queue_t* queue) {
 	return queue->is_empty;
 }
 
+/* if the queue is not empty, returns the instruction  in the head of the buffer. */
 uint32_t top(inst_queue_t* queue) {
 	if (queue->is_empty) {
 		printf("Should check using is_empty() before top\n");
@@ -17,6 +19,7 @@ uint32_t top(inst_queue_t* queue) {
 	return queue->inst_buff[queue->head_index];
 }
 
+/* if the queue is not full, add an instruction into its tail. */
 void enqueue(inst_queue_t* queue, uint32_t val) {
 	if (queue->is_full) {
 		printf("Should check using is_full() before inserting\n");
@@ -31,6 +34,7 @@ void enqueue(inst_queue_t* queue, uint32_t val) {
 	queue->is_empty = false;
 }
 
+/* if the queue is not empty, removes the value in its head and returns it. */
 uint32_t dequeue(inst_queue_t* queue) {
 	if (queue->is_empty) {
 		printf("Should check using is_empty() before dequeueing\n");
@@ -47,6 +51,7 @@ uint32_t dequeue(inst_queue_t* queue) {
 	return queue->inst_buff[old_head];
 }
 
+/* setting memory for the queue and initializing its values. */
 void init_instruction_queue(inst_queue_t* queue) {
 	memset(queue->inst_buff, 0, sizeof(queue->inst_buff));
 	queue->head_index = 0;

@@ -1,5 +1,7 @@
+import sys
+
 lines = []
-with open("input.txt", "r") as file:
+with open(sys.argv[1], "r") as file:
     for line in file:
         # Split the line with respect to the space character
         words = line.split(" ")
@@ -12,7 +14,7 @@ with open("input.txt", "r") as file:
         elif words[0] == "ST":
             operation = 1
             dst = 0
-            imm = words[2]
+            imm = int(words[2])
             src0 = 0
             src1 = int(words[1][1:])
         elif words[0] == "ADD":
@@ -48,6 +50,6 @@ with open("input.txt", "r") as file:
         output = (operation << 24) | (dst << 20) | (src0 << 16) | (src1 << 12) | imm
         lines.append("{0:0{1}x}".format(output, 8))
 
-with open('memin.txt', 'w') as f:
+with open(sys.argv[2], 'w') as f:
   for line in lines:
     f.write(line + '\n')
