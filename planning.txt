@@ -39,11 +39,11 @@ V 29. think if we want to implement trimming the output mem file if only include
 
 V 100. free all mallocs (units, instructuions)
 V 101. close files
-102. get rid of TODOs
-103. check using the example files
+V 102. get rid of TODOs
+V 103. check using the example files
 V 104. add documentation file
-105. write three memin + cfg files for tests.
-106. document the check programs in doc file
+V 105. write three memin + cfg files for tests.
+V 106. document the check programs in doc file
 107. go over forum
 108. organize submission
 
