@@ -292,8 +292,8 @@ static bool is_address_collide(opcode_e opcode, uint32_t dst_address, uint32_t s
 
 	// any address present in the active address which came from a different unit
 	//		will indicate a collision.
-	address_entry* address_buff = g_simulation.active_st_addresses;
-	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
+	address_entry* address_buff = g_simulation.active_addresses;
+	for (uint32_t i = 0; i < g_simulation.active_addresses_size; i++) {
 		if (address_buff[i].addr == dst_address && (address_buff[i].active_unit != req_unit)) {
 			return true;
 		}
@@ -303,15 +303,15 @@ static bool is_address_collide(opcode_e opcode, uint32_t dst_address, uint32_t s
 
 
 static bool insert_address_to_buff(uint32_t addr, unit_t* requesting_unit) {
-	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
-		if (g_simulation.active_st_addresses[i].addr == addr) {
+	for (uint32_t i = 0; i < g_simulation.active_addresses_size; i++) {
+		if (g_simulation.active_addresses[i].addr == addr) {
 			return false;
 		}
 	}
-	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
-		if (g_simulation.active_st_addresses[i].addr == ADDRESS_INVALID) {
-			g_simulation.active_st_addresses[i].addr = addr;
-			g_simulation.active_st_addresses[i].active_unit = requesting_unit;
+	for (uint32_t i = 0; i < g_simulation.active_addresses_size; i++) {
+		if (g_simulation.active_addresses[i].addr == ADDRESS_INVALID) {
+			g_simulation.active_addresses[i].addr = addr;
+			g_simulation.active_addresses[i].active_unit = requesting_unit;
 			return true;
 		}
 	}
@@ -319,10 +319,10 @@ static bool insert_address_to_buff(uint32_t addr, unit_t* requesting_unit) {
 }
 
 static void remove_address_from_buff(uint32_t addr) {
-	for (uint32_t i = 0; i < g_simulation.active_st_addresses_size; i++) {
-		if (g_simulation.active_st_addresses[i].addr == addr) {
-			g_simulation.active_st_addresses[i].addr = ADDRESS_INVALID;
-			g_simulation.active_st_addresses[i].active_unit = NULL;
+	for (uint32_t i = 0; i < g_simulation.active_addresses_size; i++) {
+		if (g_simulation.active_addresses[i].addr == addr) {
+			g_simulation.active_addresses[i].addr = ADDRESS_INVALID;
+			g_simulation.active_addresses[i].active_unit = NULL;
 		}
 	}
 }

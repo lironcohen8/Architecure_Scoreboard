@@ -38,11 +38,11 @@ typedef struct {
 	/* Pointer to the trace unit. */
 	unit_t*			trace_unit;
 
-	/* The active store addresses array. */
-	address_entry*	active_st_addresses;
+	/* The active addresses array. */
+	address_entry*	active_addresses;
 
-	/* The active store addresses array size. */
-	uint32_t		active_st_addresses_size;
+	/* The active addresses array size. */
+	uint32_t		active_addresses_size;
 
 	/* Current pc, updated after succesful fetch */
 	uint32_t		pc;
