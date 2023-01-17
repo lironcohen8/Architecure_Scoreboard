@@ -1,6 +1,6 @@
 #pragma once
 #include "global.h"
-#include "inst_queue.h"
+#include "uint32_queue.h"
 #include "memin.h"
 #include "parsing.h"
 
@@ -21,7 +21,7 @@ typedef struct {
 	uint32_t		finished_cnt;
 
 	/* Instruction queue */
-	inst_queue_t	inst_queue;
+	uint32_queue_t	inst_queue;
 
 	/* Registers values and status */
 	reg_val_status  regs[REGS_NUM];

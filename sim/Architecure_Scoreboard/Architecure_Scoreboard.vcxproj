@@ -146,7 +146,7 @@
     <ClCompile Include="cfg.c" />
     <ClCompile Include="free_memory.c" />
     <ClCompile Include="init.c" />
-    <ClCompile Include="inst_queue.c" />
+    <ClCompile Include="uint32_queue.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="memin.c" />
     <ClCompile Include="operations.c" />
@@ -159,7 +159,7 @@
     <ClInclude Include="free_memory.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="init.h" />
-    <ClInclude Include="inst_queue.h" />
+    <ClInclude Include="uint32_queue.h" />
     <ClInclude Include="memin.h" />
     <ClInclude Include="operations.h" />
     <ClInclude Include="output_files.h" />

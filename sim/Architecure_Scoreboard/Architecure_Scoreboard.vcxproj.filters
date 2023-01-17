@@ -57,7 +57,7 @@
     <ClCompile Include="init.c">
       <Filter>Source Files\initialization</Filter>
     </ClCompile>
-    <ClCompile Include="inst_queue.c">
+    <ClCompile Include="uint32_queue.c">
       <Filter>Source Files\instruction_queue</Filter>
     </ClCompile>
     <ClCompile Include="output_files.c">
@@ -89,7 +89,7 @@
     <ClInclude Include="init.h">
       <Filter>Source Files\initialization</Filter>
     </ClInclude>
-    <ClInclude Include="inst_queue.h">
+    <ClInclude Include="uint32_queue.h">
       <Filter>Source Files\instruction_queue</Filter>
     </ClInclude>
     <ClInclude Include="output_files.h">
