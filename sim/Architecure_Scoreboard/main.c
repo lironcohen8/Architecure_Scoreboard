@@ -8,6 +8,11 @@
 #include "free_memory.h"
 
 int main(int argc, char* argv[]) {
+    if (argc != 7) {
+        printf("Wrong number of input args\n");
+        exit(1);
+    }
+
     // Open the input and output files and validate them
     FILE* cfg_file = open_and_validate_file(argv[1], "r");
     FILE* memin_file = open_and_validate_file(argv[2], "r");
