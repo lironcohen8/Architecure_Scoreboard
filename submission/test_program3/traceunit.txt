@@ -1,0 +1,10 @@
+11 ADD0 F2 F2 F3 - - Yes Yes
+12 ADD0 F2 F2 F3 - - No No
+13 ADD0 F2 F2 F3 - - No No
+15 ADD0 F6 F6 F7 - - Yes Yes
+16 ADD0 F6 F6 F7 - - No No
+17 ADD0 F6 F6 F7 - - No No
+19 ADD0 F6 F6 F8 - ADD1 Yes No
+20 ADD0 F6 F6 F8 - - Yes Yes
+21 ADD0 F6 F6 F8 - - No No
+22 ADD0 F6 F6 F8 - - No No

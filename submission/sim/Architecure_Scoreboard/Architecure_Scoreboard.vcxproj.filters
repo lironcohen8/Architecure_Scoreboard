@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\input_parsing">
+      <UniqueIdentifier>{efe704e7-93f2-4523-97d3-563080654d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input_parsing\memin">
+      <UniqueIdentifier>{38e5d673-e1e0-4270-a3e9-53e733bf8f1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input_parsing\cfg">
+      <UniqueIdentifier>{156ebf5f-f7f8-499b-9949-9134e7113dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\initialization">
+      <UniqueIdentifier>{e45c01c5-3ba7-4ad8-8184-804a24e9bbcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\instruction_queue">
+      <UniqueIdentifier>{9a26287c-4cb9-4f19-aa8d-71c8f5afbe3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scoreboard">
+      <UniqueIdentifier>{7ffd0ee4-64d7-4464-9b17-637f41ec21ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\output_files">
+      <UniqueIdentifier>{a95f112b-a6a9-4965-be53-1a55a9e8f140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\operations">
+      <UniqueIdentifier>{2cd7fd8c-6007-44fd-959e-1871e87ce463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\disposal">
+      <UniqueIdentifier>{401f30f7-a07a-4dd6-a489-499b246b77a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parsing.c">
+      <Filter>Source Files\input_parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="memin.c">
+      <Filter>Source Files\input_parsing\memin</Filter>
+    </ClCompile>
+    <ClCompile Include="cfg.c">
+      <Filter>Source Files\input_parsing\cfg</Filter>
+    </ClCompile>
+    <ClCompile Include="init.c">
+      <Filter>Source Files\initialization</Filter>
+    </ClCompile>
+    <ClCompile Include="uint32_queue.c">
+      <Filter>Source Files\instruction_queue</Filter>
+    </ClCompile>
+    <ClCompile Include="output_files.c">
+      <Filter>Source Files\output_files</Filter>
+    </ClCompile>
+    <ClCompile Include="scoreboard.c">
+      <Filter>Source Files\scoreboard</Filter>
+    </ClCompile>
+    <ClCompile Include="operations.c">
+      <Filter>Source Files\operations</Filter>
+    </ClCompile>
+    <ClCompile Include="free_memory.c">
+      <Filter>Source Files\disposal</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="global.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parsing.h">
+      <Filter>Source Files\input_parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="memin.h">
+      <Filter>Source Files\input_parsing\memin</Filter>
+    </ClInclude>
+    <ClInclude Include="cfg.h">
+      <Filter>Source Files\input_parsing\cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="init.h">
+      <Filter>Source Files\initialization</Filter>
+    </ClInclude>
+    <ClInclude Include="uint32_queue.h">
+      <Filter>Source Files\instruction_queue</Filter>
+    </ClInclude>
+    <ClInclude Include="output_files.h">
+      <Filter>Source Files\output_files</Filter>
+    </ClInclude>
+    <ClInclude Include="operations.h">
+      <Filter>Source Files\operations</Filter>
+    </ClInclude>
+    <ClInclude Include="scoreboard.h">
+      <Filter>Source Files\scoreboard</Filter>
+    </ClInclude>
+    <ClInclude Include="free_memory.h">
+      <Filter>Source Files\disposal</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
