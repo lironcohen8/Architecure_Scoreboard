@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
     // Free memory
     free_units_memory(simulation->op_units, &simulation->config);
-    free_address_buff(simulation->active_st_addresses);
+    free_address_buff(simulation->active_addresses);
 
     // Close files
     close_file(cfg_file, argv[1]);

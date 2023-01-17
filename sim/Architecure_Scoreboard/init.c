@@ -54,17 +54,19 @@ static void init_regs_status_values(reg_val_status* regs) {
 }
 
 /* allocating the array of the current writing address (updated every cycle) as the total number of LD and ST units */
-static void create_current_writing_addresses(simulation_t* simulation, int num_of_st_units) {
-    simulation->active_st_addresses =  (address_entry*)malloc(num_of_st_units * sizeof(address_entry));
-    if (simulation->active_st_addresses == NULL) {
+
+static void create_current_writing_addresses(simulation_t* simulation, int num_of_st_ld_units) {
+    simulation->active_addresses =  (address_entry*)malloc(num_of_st_ld_units * sizeof(address_entry));
+    if (simulation->active_addresses == NULL) {
         printf("Error when malloc");
         exit(0);
     }
-    for (int i = 0; i < num_of_st_units; i++) {
-        simulation->active_st_addresses[i].addr = ADDRESS_INVALID;
+    for (int i = 0; i < num_of_st_ld_units; i++) {
+        simulation->active_addresses[i].addr = ADDRESS_INVALID;
     }
-    simulation->active_st_addresses_size = num_of_st_units;
+    simulation->active_addresses_size = num_of_st_ld_units;
 }
+
 
 /* init everything for simulation struct from memory input file and config unput file. */
 void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file) {
@@ -84,7 +86,7 @@ void init_simulation(simulation_t* simulation, FILE* memin_file, FILE* cfg_file)
     simulation->op_units = init_units(&simulation->config);
     simulation->trace_unit = &simulation->op_units[simulation->config.trace_unit.operation][simulation->config.trace_unit.index];
 
-    create_current_writing_addresses(simulation, simulation->config.units[ST].num_units);
+    create_current_writing_addresses(simulation, simulation->config.units[ST].num_units + simulation->config.units[LD].num_units);
     init_regs_status_values(simulation->regs);
-    init_instruction_queue(&simulation->inst_queue);
+    init_queue(&simulation->inst_queue);
 }

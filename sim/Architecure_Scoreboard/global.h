@@ -36,7 +36,8 @@ typedef enum {
     F13,
     F14,
     F15,
-    REGS_NUM
+    REGS_NUM,
+    REG_INVALID,
 } reg_e;
 
 /* an enum that contains the possible states of a unit */
@@ -125,6 +126,8 @@ typedef struct unit_t {
     unit_state_e    unit_state;
     int             exec_cnt;
     inst_t*         active_instruction;
+    float_uint      src0;
+    float_uint      src1;
     float_uint      exec_result;
     bool            executed;
 } unit_t;
@@ -179,5 +182,5 @@ static const char* opcode_str[] = {
 
 typedef struct {
     uint32_t addr;
-    uint32_t st_id;
+    unit_t* active_unit;
 } address_entry;

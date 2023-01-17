@@ -47,11 +47,9 @@ void update_reg(inst_t* inst, reg_val_status* g_regs, float_uint* res_ptr, uint3
 }
 
 /* gets an instruction to preform and calls the relevant operation method according to its opcode. */
-void perform_instruction(reg_val_status* g_regs, inst_t* instruction, float_uint* res_ptr, uint32_t* g_mem_arr, bool* halted) {
+void perform_instruction(reg_val_status* g_regs, inst_t* instruction, float_uint* res_ptr, uint32_t* g_mem_arr, bool* halted, float_uint src0, float_uint src1) {
 	opcode_e operation = instruction->opcode;
 	int imm = instruction->imm;
-	float_uint src0 = g_regs[instruction->src0].value.old_val;
-	float_uint src1 = g_regs[instruction->src1].value.old_val;
 
 	switch (operation) {
 		case LD:
